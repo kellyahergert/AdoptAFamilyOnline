@@ -1,0 +1,123 @@
+nav {
+  padding:40px 5px 0px 110px;
+}
+
+body {
+  font-family:Arial,Helvettica,sans-serif;
+  background-color:#333;
+}
+
+a.flowPrevious {
+  color: #1d69b7;
+  background-color: #FFF;
+  border: 2px solid #559ed2;
+  padding: 3px 5px;
+  border-radius: 7px;
+  margin: 2px 2px 2px 0px;
+  text-decoration: none;
+  font-size: 90%;
+  line-height: 1.4;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+span.flowCurrent {
+  color: #FFF;
+  font-weight: 170%;
+  background-color: #559ed2;
+  border: 2px solid #559ed2;
+  padding: 3px 5px;
+  border-radius: 7px;
+  margin: 2px 2px 2px 0px;
+  text-decoration: none;
+  font-size: 90%;
+  line-height: 1.4;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+span.flowFuture {
+  color: darkgray;
+  background-color: #FFF;
+  border: 2px solid lightgray;
+  padding: 3px 5px;
+  border-radius: 7px;
+  margin: 2px 2px 2px 0px;
+  text-decoration: none;
+  font-size: 90%;
+  line-height: 1.4;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+/* a {
+    color: #1086A4;
+    text-decoration: none;
+    cursor: pointer;
+} */
+
+span.arrowPrevious {
+  font-size: 120%;
+  color: #559ed2;
+  font-weight: bold;
+  display: inline-block;
+}
+
+span.arrowFuture {
+  font-size: 120%;
+  color: lightgray;
+  font-weight: bold;
+  display: inline-block;
+}
+
+span.label_1 {
+  width: 185px;
+  display:block;
+  float:left;
+}
+span.label_2 {
+  width: 200px;
+  display:block;
+  float:left;
+}
+span.label_3 {
+  width: 275px;
+  display:block;
+  float:left;
+}
+span.label_4 {
+  width: 300px;
+  display:block;
+  float:left;
+  font-size: 88%;
+}
+input {
+  float:left;
+}
+p {
+  padding-top:5px;
+  clear: all;
+}
+h2 {
+  padding-top:1px;
+  clear: all;
+}
+label {
+  padding-right:20px;
+}
+
+section {
+  background-color:white;
+  width:630px;
+/*min-width:625px;
+  max-width:900px;*/
+  margin-right:34%;
+  margin-left:30px;
+  margin-top:45px;
+  margin-bottom:10px;
+  border-color:gray;
+  border-style:solid;
+  border-width:2px;
+  border-radius: 7px;
+  padding:0px 10px 30px 25px;
+}

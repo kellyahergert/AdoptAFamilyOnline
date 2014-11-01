@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Files - Adopt a Family</title>
+  <link rel="stylesheet" type="text/css" href="styles.css" media="all">
+</head>
+
+<body>
+
+<header>
+  <nav>
+    <a class="flowPrevious" href="aaf1_email_info.html">Email Info</a>
+    <span class="arrowPrevious">&#8674;</span>
+    <span class="flowCurrent">Upload Files</span>
+    <span class="arrowFuture">&#8674;</span>
+    <span class="flowFuture">Family Matching</span>
+    <span class="arrowFuture">&#8674;</span>
+    <span class="flowFuture">Preview and Run!</span>
+  </nav>
+</header>
+
+<section>
+  <form method="POST" action="servletGetData">
+    <h2>Files:</h2>
+    <p><label><span class=label_2>Text for Email to Sponsors: </span><input type=file name=sponsorEmailTextFile required></label></p>
+    <p><label><span class=label_2>Text for Email to Families: </span><input type=file name=familyEmailTextFile required></label></p>
+    <p><label><span class=label_2>Families CSV: </span><input type=file name=familyCSV required></label></p>
+    <p><label><span class=label_2>Sponsors CSV: </span><input type=file name=sponsorCSV required></label></p>
+    <p><input type="submit" name=goToAaf3 value="Continue to Step 3"></p>
+  </form>
+</section>
+
+</body>
+</html>
