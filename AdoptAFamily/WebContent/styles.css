@@ -8,9 +8,9 @@ body {
 }
 
 a.flowPrevious {
-  color: #1d69b7;
+  color: #1a74b2;
   background-color: #FFF;
-  border: 2px solid #559ed2;
+  border: 2px solid #1791c4;
   padding: 3px 5px;
   border-radius: 7px;
   margin: 2px 2px 2px 0px;
@@ -24,8 +24,8 @@ a.flowPrevious {
 span.flowCurrent {
   color: #FFF;
   font-weight: 170%;
-  background-color: #559ed2;
-  border: 2px solid #559ed2;
+  background-color: #1791c4;
+  border: 2px solid #1791c4;
   padding: 3px 5px;
   border-radius: 7px;
   margin: 2px 2px 2px 0px;
