@@ -43,7 +43,7 @@
       <input type=text name="smtpServerLogin" maxlength="100" value="jordhergert@comcast.net"></label>
     </p>
     <p><label><span class=label_1>Email Password: </span>
-      <input type=password name="smtpServerPassword" value="Weasel6^"></label>
+      <input type=password name="smtpServerPassword"></label>
     </p>
 
     <h3>Send Test email</h3>
