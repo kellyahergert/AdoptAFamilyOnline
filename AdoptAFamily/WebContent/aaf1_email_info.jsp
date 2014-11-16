@@ -33,11 +33,11 @@
 <section>
   <form method="POST" action="EmailSenderServlet">
     <h2>Email Info</h2>
-    <p><label><span class=label_1>"Sender" Email Address: </span>
-      <input type=email name=emailInput maxlength="100" value="test@aaf.com" required></label>
-    </p>
     <p><label><span class=label_1>Mail Server IP Address: </span>
       <input type=text name="smtpServerIP" placeholder="smtp.comcast.net" maxlength="100" value="smtp.comcast.net" required></label>
+    </p>
+    <p><label><span class=label_1>Mail Server Port: </span>
+      <input type=text name="smtpPort" placeholder="587" maxlength="5" value="587" required></label>
     </p>
     <p><label><span class=label_1>Email Login: </span>
       <input type=text name=emailLogin maxlength="100" value="jordhergert@comcast.net"></label>
@@ -47,6 +47,9 @@
     </p>
 
     <h3>Send Test email</h3>
+    <p><label><span class=label_3>"Sender" Email Address: </span>
+      <input type=email name=emailInput maxlength="100" value="test@aaf.com" required></label>
+    </p>
     <p>
       <label>
         <span class=label_3>Send test email to this email address: </span>
