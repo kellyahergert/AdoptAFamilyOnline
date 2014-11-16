@@ -33,20 +33,27 @@
 <section>
   <form method="POST" action="EmailSenderServlet">
     <h2>Email Info</h2>
-    <p><label><span class=label_1>"Sender" Email Address: </span><input type=email name=emailInput maxlength="100" required></label></p>
-    <p><label><span class=label_1>Mail Server IP Address: </span><input type=text name="smtpServerIP" placeholder="smtp.comcast.net" maxlength="100" required></label></p>
-    <p><label><span class=label_1>Email Login: </span><input type=text name=emailLogin maxlength="100"></label></p>
-    <p><label><span class=label_1>Email Password: </span><input type=password name=emailPassword></label></p>
+    <p><label><span class=label_1>"Sender" Email Address: </span>
+      <input type=email name=emailInput maxlength="100" value="test@aaf.com" required></label>
+    </p>
+    <p><label><span class=label_1>Mail Server IP Address: </span>
+      <input type=text name="smtpServerIP" placeholder="smtp.comcast.net" maxlength="100" value="smtp.comcast.net" required></label>
+    </p>
+    <p><label><span class=label_1>Email Login: </span>
+      <input type=text name=emailLogin maxlength="100" value="jordhergert@comcast.net"></label>
+    </p>
+    <p><label><span class=label_1>Email Password: </span>
+      <input type=password name=emailPassword value="Weasel6^"></label>
+    </p>
 
     <h3>Send Test email</h3>
     <p>
       <label>
         <span class=label_3>Send test email to this email address: </span>
-        <span class=label_1><input type=email name=testEmail maxlength="100" ></span>
+        <span class=label_1><input type=email name=testEmail maxlength="100" value="kellyahergert@gmail.com"></span>
       </label>
       <input type=submit name=sendTestSponsorEmail value="Send Test Email">
     </p>
-    <!-- <p><span style="float:left;margin-left:275px;color:darkgrey;">Email results...</span></p> -->
     <p style="color:darkgrey;"><span class=label_3>&nbsp</span>${emailResponseMsg}</p>
     <br>
     <p><input type="submit" name=goToAaf2 value="Continue to Step 2"></p>
