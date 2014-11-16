@@ -19,21 +19,15 @@ import aaf.model.EmailServerCredentials;
 @WebServlet("/EmailSenderServlet")
 public class EmailSenderServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String SERVER_CREDS_KEY = "serverCredentials";
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public EmailSenderServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("EmaiSenderServlet.doGet called!");
-	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -66,6 +60,12 @@ public class EmailSenderServlet extends HttpServlet {
 		}
 		else if (request.getParameter("goToAaf2") != null)
 		{
+			
+			request.getSession().setAttribute(SERVER_CREDS_KEY, creds);
+			request.getRequestDispatcher("aaf2_files.html").forward(request, response);
+			
+
+			/*
 	        // Obtain a database connection:
 	        EntityManagerFactory emf =
 	           (EntityManagerFactory)getServletContext().getAttribute("emf");
@@ -117,8 +117,9 @@ public class EmailSenderServlet extends HttpServlet {
 	                em.getTransaction().rollback();
 	            em.close();
 	        }
+	        */
 			
-			request.getRequestDispatcher("aaf2_files.html").forward(request, response);
+
 		}
 		else
 		{
