@@ -26,7 +26,7 @@ public class BasicEmailSender {
 	public static void main(String[] args)
 	{
 		String fromAddress = "kellytorkelson@gmail.com";
-		EmailServerCredentials creds = new EmailServerCredentials("smtp.comcast.net", "jordhergert@comcast.net", "Weasel6^");
+		EmailServerCredentials creds = new EmailServerCredentials("smtp.comcast.net", 587, "jordhergert@comcast.net", "comcastPasswordGoesHere");
 
 		BasicEmailSender sender = new BasicEmailSender(fromAddress, creds);
 		sender.sendEmail("subject", "email text", "kellyahergert@gmail.com");
@@ -45,14 +45,13 @@ public class BasicEmailSender {
 		
 		if (username != "" && password != "")
 		{
-			properties.setProperty("mail.smtp.port", "587");
-//			properties.setProperty("mail.smtp.port", "465");
-
 			properties.setProperty("mail.smtp.auth", "true");
 			properties.setProperty("mail.smtp.starttls.enable", "true");
 
-			Authenticator auth = new Authenticator(){
-                protected PasswordAuthentication getPasswordAuthenticator(){
+			Authenticator auth = new Authenticator()
+			{
+                protected PasswordAuthentication getPasswordAuthenticator()
+                {
                         return new PasswordAuthentication(username, password);
                 }
 			};
@@ -61,8 +60,6 @@ public class BasicEmailSender {
 		}
 		else
 		{
-
-//			properties.setProperty("mail.smtp.auth", "false");
 			System.out.println("sending unauthenticated");
 			mySession = Session.getDefaultInstance(properties);
 		}
@@ -70,7 +67,8 @@ public class BasicEmailSender {
 	
 	public String sendEmail(String theSubject, String theText, String theToAddress)
 	{
-		try {
+		try
+		{
 			MimeMessage message = new MimeMessage(mySession);
 
 			message.setFrom(new InternetAddress(myFromAddress));
@@ -92,7 +90,11 @@ public class BasicEmailSender {
 			if (myServerCredentials.getUsername() != "" && myServerCredentials.getPassword() != "")
 			{
 				Transport transport = mySession.getTransport();
-				transport.connect("smtp.comcast.net", 587, myServerCredentials.getUsername(), myServerCredentials.getPassword());
+				Properties properties = System.getProperties();
+				transport.connect(myServerCredentials.getHost(),
+						          myServerCredentials.getPort(),
+						          myServerCredentials.getUsername(),
+						          myServerCredentials.getPassword());
 				transport.sendMessage(message, message.getAllRecipients());
 			}
 			else
@@ -101,10 +103,11 @@ public class BasicEmailSender {
 			}
 			
 			System.out.println("Sent message successfully to " + theToAddress + "....");
-			return "Email was successfully sent to " + theToAddress;
-		} catch (MessagingException mex) {
-			mex.printStackTrace();
-			return "Failed to send email to " + theToAddress;
+			return "Email sent successfully!";
+		}
+		catch (MessagingException mex)
+		{
+			return "Failed to send email";
 		}
 	}
 	

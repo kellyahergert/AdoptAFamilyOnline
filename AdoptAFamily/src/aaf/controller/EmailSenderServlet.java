@@ -1,8 +1,10 @@
 package aaf.controller;
 
 import java.io.IOException;
-import java.util.Enumeration;
+import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,9 +39,8 @@ public class EmailSenderServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("EmaiSenderServlet.doPost called!");
-        Enumeration<String> params = request.getParameterNames();
-		
+//        Enumeration<String> params = request.getParameterNames();
+//		
 //		while (params.hasMoreElements())
 //		{
 //			String param = params.nextElement();
@@ -49,16 +50,80 @@ public class EmailSenderServlet extends HttpServlet {
 
 		EmailServerCredentials creds = new EmailServerCredentials(
 				request.getParameter("smtpServerIP"),
-				request.getParameter("emailLogin"),
-				request.getParameter("emailPassword"));
+				Integer.parseInt(request.getParameter("smtpServerPort")), // TODO handle NumberFormatException?
+				request.getParameter("smtpServerLogin"),
+				request.getParameter("smtpServerPassword"));
 
-		BasicEmailSender sender = new BasicEmailSender(request.getParameter("emailInput"), creds);
-		sender.sendEmail("subject", "sent from my servlet!", request.getParameter("testEmail"));
-		
-		request.setAttribute("emailResponseMsg", "Email Sent Successfully!");
+		if (request.getParameter("sendTestSponsorEmail") != null)
+		{
+			BasicEmailSender sender = new BasicEmailSender(request.getParameter("testEmailFromAddr"), creds);
+			String emailStatus = sender.sendEmail("subject", "sent from my servlet!", request.getParameter("testEmailToAddr"));
+			
+			request.setAttribute("emailResponseMsg", emailStatus);
+	//		request.setAttribute("emailInputValue", "emailinputfieldvalue");  // add value="$emailInputValue" to jsp input tag
+	
+			request.getRequestDispatcher("aaf1_email_info.jsp").forward(request, response);
+		}
+		else if (request.getParameter("goToAaf2") != null)
+		{
+	        // Obtain a database connection:
+	        EntityManagerFactory emf =
+	           (EntityManagerFactory)getServletContext().getAttribute("emf");
+	        EntityManager em = emf.createEntityManager();
+	 
+	        try {
 
-		request.getRequestDispatcher("aaf1_email_info.jsp").forward(request, response);
-		
+//	            // see if user is already in the database
+//	            List<EmailServerCredentials> userCredsList = em.createQuery(
+//		                "SELECT cred FROM EmailServerCredentials cred WHERE username='" + request.getParameter("smtpServerLogin") + "'",
+//		                EmailServerCredentials.class).getResultList();
+	            
+	            List<EmailServerCredentials> credsList = em.createQuery(
+		                "SELECT cred FROM EmailServerCredentials cred",
+		                EmailServerCredentials.class).getResultList();
+		            
+	            boolean userFound = false;
+	            for (EmailServerCredentials cred : credsList)
+	            {
+	            	if (cred.getUsername().equals(request.getParameter("smtpServerLogin")))
+	            	{
+	            		userFound = true;
+	            	}
+	            }
+	            
+//	            if (userCredsList.isEmpty())
+		        if (!userFound)
+	            {
+	            	System.out.println("Adding user to db " + request.getParameter("smtpServerLogin"));
+	                em.getTransaction().begin();
+		            // persist the email server credentials for future email sending
+	                em.persist(creds);
+	                em.getTransaction().commit();
+	            }
+
+	            List<EmailServerCredentials> credsList2 = em.createQuery(
+	                "SELECT cred FROM EmailServerCredentials cred",
+	                EmailServerCredentials.class).getResultList();
+	            
+	            for (EmailServerCredentials cred : credsList2)
+	            {
+	            	System.out.println("cred from db " + cred);
+	            }
+
+	 
+	        } finally {
+	            // Close the database connection:
+	            if (em.getTransaction().isActive())
+	                em.getTransaction().rollback();
+	            em.close();
+	        }
+			
+			request.getRequestDispatcher("aaf2_files.html").forward(request, response);
+		}
+		else
+		{
+			System.out.println("unknown post request");
+		}
 	}
 
 }
