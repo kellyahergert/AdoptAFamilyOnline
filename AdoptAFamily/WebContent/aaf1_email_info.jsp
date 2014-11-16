@@ -43,7 +43,7 @@
       <input type=text name=emailLogin maxlength="100" value="jordhergert@comcast.net"></label>
     </p>
     <p><label><span class=label_1>Email Password: </span>
-      <input type=password name=emailPassword value="Weasel6^"></label>
+      <input type=password name=emailPassword></label>
     </p>
 
     <h3>Send Test email</h3>
