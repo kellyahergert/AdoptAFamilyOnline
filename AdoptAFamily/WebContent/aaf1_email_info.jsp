@@ -34,7 +34,7 @@
   <form method="POST" action="EmailSenderServlet">
     <h2>Email Info</h2>
     <p><label><span class=label_1>"Sender" Email Address: </span><input type=email name=emailInput maxlength="100" required></label></p>
-    <p><label><span class=label_1>Mail Server IP Address: </span><input type=text placeholder="smtp.comcast.net" maxlength="100" required></label></p>
+    <p><label><span class=label_1>Mail Server IP Address: </span><input type=text name="smtpServerIP" placeholder="smtp.comcast.net" maxlength="100" required></label></p>
     <p><label><span class=label_1>Email Login: </span><input type=text name=emailLogin maxlength="100"></label></p>
     <p><label><span class=label_1>Email Password: </span><input type=password name=emailPassword></label></p>
 
@@ -47,7 +47,7 @@
       <input type=submit name=sendTestSponsorEmail value="Send Test Email">
     </p>
     <!-- <p><span style="float:left;margin-left:275px;color:darkgrey;">Email results...</span></p> -->
-    <p style="color:darkgrey;"><span class=label_3>&nbsp</span>JSP text goes here!</p>
+    <p style="color:darkgrey;"><span class=label_3>&nbsp</span>${emailResponseMsg}</p>
     <br>
     <p><input type="submit" name=goToAaf2 value="Continue to Step 2"></p>
 

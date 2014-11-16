@@ -27,7 +27,7 @@ public class BasicEmailSender {
 	{
 		String fromAddress = "kellytorkelson@gmail.com";
 		EmailServerCredentials creds = new EmailServerCredentials("smtp.comcast.net", "jordhergert@comcast.net", "Weasel6^");
-		
+
 		BasicEmailSender sender = new BasicEmailSender(fromAddress, creds);
 		sender.sendEmail("subject", "email text", "kellyahergert@gmail.com");
 	}
@@ -46,9 +46,11 @@ public class BasicEmailSender {
 		if (username != "" && password != "")
 		{
 			properties.setProperty("mail.smtp.port", "587");
+//			properties.setProperty("mail.smtp.port", "465");
+
 			properties.setProperty("mail.smtp.auth", "true");
-//			properties.setProperty("mail.smtp.starttls.enable", "true");
-			
+			properties.setProperty("mail.smtp.starttls.enable", "true");
+
 			Authenticator auth = new Authenticator(){
                 protected PasswordAuthentication getPasswordAuthenticator(){
                         return new PasswordAuthentication(username, password);

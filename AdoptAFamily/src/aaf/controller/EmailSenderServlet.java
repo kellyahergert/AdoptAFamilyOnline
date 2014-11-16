@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import aaf.model.EmailServerCredentials;
+
 /**
  * Servlet implementation class EmailSenderServlet
  */
@@ -38,14 +40,24 @@ public class EmailSenderServlet extends HttpServlet {
 		System.out.println("EmaiSenderServlet.doPost called!");
         Enumeration<String> params = request.getParameterNames();
 		
-		while (params.hasMoreElements())
-		{
-			String param = params.nextElement();
-			
-			System.out.println(param + " : " + request.getParameter(param));
-		}
+//		while (params.hasMoreElements())
+//		{
+//			String param = params.nextElement();
+//			
+//			System.out.println(param + " : " + request.getParameter(param));
+//		}
+
+		EmailServerCredentials creds = new EmailServerCredentials(
+				request.getParameter("smtpServerIP"),
+				request.getParameter("emailLogin"),
+				request.getParameter("emailPassword"));
+
+		BasicEmailSender sender = new BasicEmailSender(request.getParameter("emailInput"), creds);
+		sender.sendEmail("subject", "sent from my servlet!", request.getParameter("testEmail"));
 		
-		request.getRequestDispatcher("aaf2_files.html").forward(request, response);
+		request.setAttribute("emailResponseMsg", "Email Sent Successfully!");
+		request.setAttribute("emailInput", "myliltest");
+		request.getRequestDispatcher("aaf1_email_info.jsp").forward(request, response);
 		
 	}
 
