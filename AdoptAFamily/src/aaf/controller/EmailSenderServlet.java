@@ -56,7 +56,7 @@ public class EmailSenderServlet extends HttpServlet {
 		sender.sendEmail("subject", "sent from my servlet!", request.getParameter("testEmail"));
 		
 		request.setAttribute("emailResponseMsg", "Email Sent Successfully!");
-		request.setAttribute("emailInput", "myliltest");
+
 		request.getRequestDispatcher("aaf1_email_info.jsp").forward(request, response);
 		
 	}
