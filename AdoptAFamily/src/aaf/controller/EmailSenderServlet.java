@@ -19,7 +19,6 @@ import aaf.model.EmailServerCredentials;
 @WebServlet("/EmailSenderServlet")
 public class EmailSenderServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String SERVER_CREDS_KEY = "serverCredentials";
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -61,7 +60,7 @@ public class EmailSenderServlet extends HttpServlet {
 		else if (request.getParameter("goToAaf2") != null)
 		{
 			
-			request.getSession().setAttribute(SERVER_CREDS_KEY, creds);
+			request.getSession().setAttribute(SessionAttributeConstants.SERVER_CREDS_KEY, creds);
 			request.getRequestDispatcher("aaf2_files.html").forward(request, response);
 			
 

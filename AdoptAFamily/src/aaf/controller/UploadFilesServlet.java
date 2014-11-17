@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import aaf.model.EmailServerCredentials;
+import aaf.model.FileLocations;
 
 /**
  * Servlet implementation class UploadFilesServlet
@@ -16,7 +17,6 @@ import aaf.model.EmailServerCredentials;
 @WebServlet("/UploadFilesServlet")
 public class UploadFilesServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String SERVER_CREDS_KEY = "serverCredentials";
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -29,10 +29,21 @@ public class UploadFilesServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		EmailServerCredentials creds = (EmailServerCredentials) request.getSession().getAttribute(SERVER_CREDS_KEY);
+		System.out.println("server creds key " + SessionAttributeConstants.SERVER_CREDS_KEY);
+		EmailServerCredentials creds = (EmailServerCredentials) request.getSession().getAttribute(SessionAttributeConstants.SERVER_CREDS_KEY);
 		System.out.println("creds from upload file servlet: " + creds);
 		
+		FileLocations fileLocs = new FileLocations(
+				request.getParameter("sponsorEmailTextFile"),
+				request.getParameter("familyEmailTextFile"),
+				request.getParameter("familyCSV"),
+				request.getParameter("sponsorCSV"),
+				request.getParameter("faqPdf"),
+				request.getParameter("familyPdfs"));
 		
+		request.getSession().setAttribute(SessionAttributeConstants.FILE_LOCS_KEY, fileLocs);
+		
+		request.getRequestDispatcher("aaf3_family_matching.html").forward(request, response);
 		
 	}
 
