@@ -1,7 +1,16 @@
 package aaf.model;
 
-public class FileLocations
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+
+@Entity
+public class FileLocations implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected String sponsorEmailTextFile;
 	protected String familyEmailTextFile;
 	protected String familyCSV;
