@@ -106,7 +106,8 @@ public class BasicEmailSender {
 			return "Email sent successfully!";
 		}
 		catch (MessagingException mex)
-		{
+		{			
+			mex.printStackTrace();
 			return "Failed to send email";
 		}
 	}
