@@ -15,6 +15,7 @@ import javax.servlet.http.Part;
 import aaf.model.Family;
 import aaf.model.FamilyReader;
 import aaf.model.Sponsor;
+import aaf.model.SponsorEntry;
 import aaf.model.SponsorReader;
 
 
@@ -43,16 +44,20 @@ public class UploadFilesServlet extends HttpServlet {
 	    
 	    SponsorReader sponsorReader = new SponsorReader(filePart.getInputStream());
 	    LinkedList<Sponsor> sponsors = sponsorReader.createSponsorObjects();
+	    PriorityQueue<SponsorEntry> sponsorEntries = sponsorReader.getSponsorEntries();
 	    
 	    request.getSession().setAttribute("sponsors", sponsors);
+	    request.getSession().setAttribute("sponsorEntries", sponsorEntries);
+	    
 	    
 	    filePart = request.getPart("familyCSV");
 	    
 	    FamilyReader familyReader = new FamilyReader(filePart.getInputStream());
 	    PriorityQueue<Family> families = familyReader.createFamilyObjects();
-	    
-	    request.getSession().setAttribute("families", families);
+//	    PriorityQueue<Family> copyOfFamilies = familyReader.createFamilyObjects();
 
+	    request.getSession().setAttribute("families", families);
+//	    request.getSession().setAttribute("copyOfFamilies", copyOfFamilies);
 		
 //		FileLocations fileLocs = new FileLocations(
 //				sponsorFileName,
