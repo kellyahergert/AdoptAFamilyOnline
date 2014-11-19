@@ -25,7 +25,7 @@
 <section>
   <h2>Previews</h2>
   <p><a href=servletSponsorEmailPreview target=_>Sponsor Email Preview</a></p>
-  <form method="POST" action="servletSponsorEmailTest">
+  <form method="POST" action="TestEmailServlet">
     <p>
       <label>
         <span class=label_4>Send test Sponsor email to this email address: </span>
@@ -35,20 +35,20 @@
     </p>
   </form>
 
-  <p><a href=servletFamilyEmailPreview target=_>Family Email Preview</a></p>
-  <form method="POST" action="servletSponsorEmailTest">
+  <p><a href=nominatorEmailPreview  target=_>Nominator Email Preview</a></p>
+  <form method="POST" action="TestEmailServlet">
     <p>
       <label>
-        <span class=label_4>Send test Family email to this email address: </span>
+        <span class=label_4>Send test Nominator email to this email address: </span>
         <span class=label_1><input type=email name=testEmail required></span>
       </label>
-      <input type=submit name=sendTestFamilyEmail value="Send Test Email">
+      <input type=submit name=sendTestNominatorEmail value="Send Test Email">
     </p>
   </form>
 </section>
 
 <section>
-  <form method="POST" action="servletRun">
+  <form method="POST" action="RunServlet">
     <h2>Send All Emails</h2>
     <p><input type=submit name=run value="Run!"></p>
   </form>
