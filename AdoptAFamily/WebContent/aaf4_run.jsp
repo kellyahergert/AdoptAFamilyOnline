@@ -14,7 +14,9 @@
   <nav>
     <a class="flowPrevious" href="aaf1_email_info.jsp">Email Info</a>
     <span class="arrowPrevious">&#8674;</span>
-    <a class="flowPrevious" href="aaf2_files.html">Upload Files</a>
+    <a class="flowPrevious" href="aaf2_files.html">Upload PDFs</a>
+    <span class="arrowPrevious">&#8674;</span>
+    <a class="flowPrevious" href="aaf2.1_files2.html">Upload Files</a>
     <span class="arrowPrevious">&#8674;</span>
     <a class="flowPrevious" href="aaf3_family_matching.html">Family Matching</a>
     <span class="arrowPrevious">&#8674;</span>
@@ -24,7 +26,7 @@
 
 <section>
   <h2>Previews</h2>
-  <p><a href=servletSponsorEmailPreview target=_>Sponsor Email Preview</a></p>
+  <!-- <p><a href=servletSponsorEmailPreview target=_>Sponsor Email Preview</a></p> -->
   <form method="POST" action="TestEmailServlet">
     <p>
       <label>
@@ -34,12 +36,12 @@
       <input type=submit name=sendTestSponsorEmail value="Send Test Email">
     </p>
   </form>
-
-  <p><a href=nominatorEmailPreview  target=_>Nominator Email Preview</a></p>
+  
+  <!-- <p><a href=nominatorEmailPreview  target=_>Nominator Email Preview</a></p> -->
   <form method="POST" action="TestEmailServlet">
     <p>
       <label>
-        <span class=label_4>Send test Nominator email to this email address: </span>
+        <span class=label_4 style="font-size:85%">Send test Nominator email to this email address: </span>
         <span class=label_1><input type=email name=testEmail required></span>
       </label>
       <input type=submit name=sendTestNominatorEmail value="Send Test Email">
