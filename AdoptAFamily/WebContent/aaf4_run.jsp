@@ -56,6 +56,7 @@
   </form>
 </section>
 <br>
+<!-- Post status with below variable -->
 <pre style="color:white;">${statusMsg}</pre>
 
 <footer>
