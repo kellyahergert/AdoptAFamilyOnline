@@ -1,6 +1,13 @@
 package aaf.model;
-public class Family extends Person implements Comparable<Family> {
 
+import java.io.Serializable;
+
+public class Family extends Person implements Comparable<Family>, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String familyName;
 	private int numFamilyMembers;

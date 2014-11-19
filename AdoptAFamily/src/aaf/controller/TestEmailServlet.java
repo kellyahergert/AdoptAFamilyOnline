@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import aaf.model.EmailServerCredentials;
+import aaf.model.Family;
+import aaf.model.Person;
 import aaf.model.Sponsor;
 
 /**
@@ -29,21 +31,28 @@ public class TestEmailServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		EmailServerCredentials creds = (EmailServerCredentials) request.getSession().getAttribute(SessionAttributeConstants.SERVER_CREDS_KEY);
+		BasicEmailSender emailSender = new BasicEmailSender("someEmailAddress@gmail.com", creds);
 		
 		if (request.getParameter("sendTestSponsorEmail") != null)
 		{
 			String sponsorEmailText = (String) request.getSession().getAttribute("sponsorEmailText");
 			Sponsor sponsor = new Sponsor(1, "John", "Johnson", request.getParameter("testEmail"), 1, 2, 3);
-			EmailConverter.convertSponsorEmailText(sponsorEmailText, sponsor);
-			EmailServerCredentials creds = (EmailServerCredentials) request.getSession().getAttribute(SessionAttributeConstants.SERVER_CREDS_KEY);
-			System.out.println("run servlet " + creds);
-			BasicEmailSender emailSender = new BasicEmailSender("someEmailAddress@gmail.com", creds);
-			
+			sponsorEmailText = EmailConverter.convertSponsorEmailText(sponsorEmailText, sponsor);
+
 			emailSender.sendEmail("Adopt A Family Information", sponsorEmailText, sponsor.getEmailAddress()); 
 		}
 		else if (request.getParameter("sendTestNominatorEmail") != null)
 		{
+			String nominatorEmailText = (String) request.getSession().getAttribute("nominatorEmailText");
+			Person nominator = new Person("Brooke", "Nominator", request.getParameter("testEmail"));
+			Family family = new Family(1, nominator, "Sherlock", "Katie", "SSherlock",
+					"family@fam.com", 5, "test");
+			System.out.println(nominatorEmailText);
+			System.out.println(family);
+			nominatorEmailText = EmailConverter.convertNominatorEmailText(nominatorEmailText, family);
 			
+			emailSender.sendEmail("Adopt A Family Information", nominatorEmailText, family.getNominator().getEmailAddress()); 
 		}
 		
 		request.getRequestDispatcher("aaf4_run.jsp").forward(request, response);

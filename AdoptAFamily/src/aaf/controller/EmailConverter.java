@@ -1,7 +1,11 @@
 package aaf.controller;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 import aaf.model.Family;
@@ -43,7 +47,12 @@ public class EmailConverter {
 		in2.close();
 		
 		String convertedText2 = EmailConverter.convertNominatorEmailText(text2, family);
-		System.out.println(convertedText2);		
+		System.out.println(convertedText2);
+//		DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+//		Date date = new Date();
+//		System.out.println(dateFormat.format(date));
+//		File storeDir = new File("C:/AAF/" + dateFormat.format(date) + "/");
+//		System.out.println(storeDir.mkdirs());
 		
 	}
 	

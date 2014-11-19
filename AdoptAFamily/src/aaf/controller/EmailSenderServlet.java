@@ -1,6 +1,10 @@
 package aaf.controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -43,6 +47,14 @@ public class EmailSenderServlet extends HttpServlet {
 				Integer.parseInt(request.getParameter("smtpServerPort")), // TODO handle NumberFormatException?
 				request.getParameter("smtpServerLogin"),
 				request.getParameter("smtpServerPassword"));
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+		Date date = new Date();
+
+		File storeDir = new File("C:/AAF/" + dateFormat.format(date) + "/");
+		storeDir.mkdirs();
+		
+		request.getSession().setAttribute("storeDir", storeDir.toPath().toString());
 
 		if (request.getParameter("sendTestSponsorEmail") != null)
 		{
