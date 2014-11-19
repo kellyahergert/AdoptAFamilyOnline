@@ -63,7 +63,7 @@ public class UploadFilesServlet extends HttpServlet {
 		
 		String storeDir = (String) request.getSession().getAttribute("storeDir");
 		
-		if (request.getParameter("uploadFiles") != null)
+		if (request.getParameter("goToAaf3") != null)
 		{
 		
 		    Part filePart;
@@ -118,7 +118,7 @@ public class UploadFilesServlet extends HttpServlet {
 		    // family csv
 		    filePart = request.getPart("familyCSV");
 		    
-		    FamilyReader familyReader = new FamilyReader(filePart.getInputStream());
+		    FamilyReader familyReader = new FamilyReader(filePart.getInputStream(), storeDir);
 		    PriorityQueue<Family> families = familyReader.createFamilyObjects();
 	
 		    request.getSession().setAttribute("families", families);
@@ -131,12 +131,12 @@ public class UploadFilesServlet extends HttpServlet {
 		    
 		    Files.copy(filePart.getInputStream(), storeFile.toPath());
 	
-		    request.getSession().setAttribute("faqLoc", storeFile.toPath());
+		    request.getSession().setAttribute("faqLoc", storeFile.toPath().toString());
 		    
-			request.getRequestDispatcher("aaf2_files.html").forward(request, response);
+			request.getRequestDispatcher("aaf3_family_matching.html").forward(request, response);
 	    
 		}
-		else if (request.getParameter("goToAaf3") != null)
+		else if (request.getParameter("goToAaf2_1") != null)
 		{
 		    // wishlist pdf
 		    Collection<Part> fileList = request.getParts();
@@ -173,7 +173,7 @@ public class UploadFilesServlet extends HttpServlet {
 	//		
 	//		FileLocations fileLocs2 = (FileLocations) request.getSession().getAttribute(SessionAttributeConstants.FILE_LOCS_KEY);
 	//		System.out.println("update servlet file locs again "  + fileLocs2);
-			request.getRequestDispatcher("aaf3_family_matching.html").forward(request, response);
+			request.getRequestDispatcher("aaf2.1_files2.html").forward(request, response);
 		}
 		
 	}

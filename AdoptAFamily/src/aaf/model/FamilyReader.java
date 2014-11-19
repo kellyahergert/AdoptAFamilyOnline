@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class FamilyReader {
 
 	InputStream familyInputStream;
+	String storeDir;
 	
 	static final int idIndex = 0;
 	static final int nomFirstNameIndex = 1;
@@ -22,9 +23,10 @@ public class FamilyReader {
 	static final int phoneNumberIndex = 3;
 	static final int numFamMembersIndex = 4;
 	
-	public FamilyReader(InputStream familyInputStream) {
+	public FamilyReader(InputStream familyInputStream, String storeDir) {
 		super();
 		this.familyInputStream = familyInputStream;
+		this.storeDir = storeDir;
 	}
 
 	public PriorityQueue<Family> createFamilyObjects() throws FileNotFoundException {
@@ -68,7 +70,7 @@ public class FamilyReader {
 				}
 				
 				noSpaceName = noSpaceName.replaceAll("\\s", "");
-				attachmentName = "2013/FamilyWishLists/" + numFamMembers + " " + noSpaceName + ".pdf";
+				attachmentName = storeDir + "/" + noSpaceName + ".pdf";
 				
 				File testAttachment = new File(attachmentName);
 				boolean attachmentExists = testAttachment.exists();

@@ -1,6 +1,7 @@
 package aaf.controller;
 
 
+import java.util.LinkedList;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -67,8 +68,15 @@ public class BasicEmailSender {
 	
 	public String sendEmail(String theSubject, String theText, String theToAddress)
 	{
+		return sendEmail(theSubject, theText, theToAddress, new LinkedList<MimeBodyPart>());
+	}
+	
+	public String sendEmail(String theSubject, String theText, String theToAddress, LinkedList<MimeBodyPart> attachments)
+	{
 		try
 		{
+			System.out.println("Attempt sending message to " + theToAddress + "....");
+			
 			MimeMessage message = new MimeMessage(mySession);
 
 			message.setFrom(new InternetAddress(myFromAddress));
@@ -85,12 +93,17 @@ public class BasicEmailSender {
 			Multipart multipart = new MimeMultipart();
 			multipart.addBodyPart(messageBodyPart);
 			
+			for (MimeBodyPart attachment : attachments)
+			{
+				multipart.addBodyPart(attachment);
+			}
+			
 			message.setContent(multipart);
 			
 			if (myServerCredentials.getUsername() != "" && myServerCredentials.getPassword() != "")
 			{
 				Transport transport = mySession.getTransport();
-				Properties properties = System.getProperties();
+
 				transport.connect(myServerCredentials.getHost(),
 						          myServerCredentials.getPort(),
 						          myServerCredentials.getUsername(),
@@ -102,7 +115,7 @@ public class BasicEmailSender {
 				Transport.send(message);
 			}
 			
-			System.out.println("Sent message successfully to " + theToAddress + "....");
+			System.out.println("---Sent message successfully to " + theToAddress + "....");
 			return "Email sent successfully!";
 		}
 		catch (MessagingException mex)

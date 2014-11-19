@@ -62,8 +62,12 @@ public class EmailSenderServlet extends HttpServlet {
 			String emailStatus = sender.sendEmail("subject", "sent from my servlet!", request.getParameter("testEmailToAddr"));
 			
 			request.setAttribute("emailResponseMsg", emailStatus);
-	//		request.setAttribute("emailInputValue", "emailinputfieldvalue");  // add value="$emailInputValue" to jsp input tag
-	
+			request.setAttribute("smtpServerIP", creds.getHost());  // add value="${smtpServerIP}" to jsp input tag
+			request.setAttribute("smtpServerPort", creds.getPort());
+			request.setAttribute("smtpServerLogin", creds.getUsername());
+			request.setAttribute("smtpServerPassword", creds.getPassword());
+			request.setAttribute("smtpServerLogin", creds.getUsername());
+			
 			request.getRequestDispatcher("aaf1_email_info.jsp").forward(request, response);
 		}
 		else if (request.getParameter("goToAaf2") != null)

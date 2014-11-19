@@ -36,31 +36,30 @@
   <form method="POST" action="EmailSenderServlet">
     <h2>Email Info</h2>
     <p><label><span class=label_1>Mail Server IP Address: </span>
-      <input type=text name="smtpServerIP" placeholder="smtp.comcast.net" maxlength="100" value="smtp.comcast.net" required></label>
+      <input type=text name="smtpServerIP" placeholder="smtp.comcast.net" maxlength="100" value="${smtpServerIP}" required></label>
     </p>
     <p><label><span class=label_1>Mail Server Port: </span>
-      <input type=text name="smtpServerPort" placeholder="587" maxlength="5" value="587" required></label>
+      <input type=text name="smtpServerPort" placeholder="587" maxlength="5" value="${smtpServerPort}" required></label>
     </p>
     <p><label><span class=label_1>Email Login: </span>
-      <input type=text name="smtpServerLogin" maxlength="100" value="jordhergert@comcast.net"></label>
+      <input type=text name="smtpServerLogin" placeholder="jordhergert@comcast.net" maxlength="100" value="${smtpServerLogin}"></label>
     </p>
     <p><label><span class=label_1>Email Password: </span>
-      <input type=password name="smtpServerPassword"></label>
+      <input type=password name="smtpServerPassword" value="${smtpServerPassword}"></label>
     </p>
 
     <h3>Send Test email</h3>
     <p><label><span class=label_3>"Sender" Email Address: </span>
-      <input type=email name="testEmailFromAddr" maxlength="100" value="test@aaf.com" required></label>
+      <input type=email name="testEmailFromAddr" maxlength="100" value=""></label>
     </p>
     <p>
       <label>
         <span class=label_3>Send test email to this email address: </span>
-        <span class=label_1><input type=email name="testEmailToAddr" maxlength="100" value="kellyahergert@gmail.com"></span>
+        <span class=label_1><input type=email name="testEmailToAddr" maxlength="100" value=""></span>
       </label>
       <input type=submit name="sendTestSponsorEmail" value="Send Test Email">
     </p>
     <p style="color:darkgrey;"><span class=label_3>&nbsp</span>${emailResponseMsg}</p>
-    <br>
     <p><input type="submit" name="goToAaf2" value="Continue to Step 2"></p>
 
   </form>
