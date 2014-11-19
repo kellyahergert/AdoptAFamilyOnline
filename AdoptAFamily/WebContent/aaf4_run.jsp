@@ -55,6 +55,8 @@
     <p><input type=submit name=run value="Run!"></p>
   </form>
 </section>
+<br>
+<pre style="color:white;">${statusMsg}</pre>
 
 <footer>
 </footer>
