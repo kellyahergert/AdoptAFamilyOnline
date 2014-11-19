@@ -3,7 +3,11 @@ package aaf.controller;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
@@ -57,6 +61,8 @@ public class UploadFilesServlet extends HttpServlet {
 			System.out.println(param + " : " + request.getParameter(param));
 		}
 		
+		String storeDir = (String) request.getSession().getAttribute("storeDir");
+		
 		if (request.getParameter("uploadFiles") != null)
 		{
 		
@@ -95,8 +101,7 @@ public class UploadFilesServlet extends HttpServlet {
 		    
 		    System.out.println("nom email text " + nominatorEmailText);
 	
-		    request.getSession().setAttribute("nominatorEmailText ", nominatorEmailText);
-		    
+		    request.getSession().setAttribute("nominatorEmailText", nominatorEmailText);
 		    
 		    // sponsor csv
 		    filePart = request.getPart("sponsorCSV");
@@ -122,11 +127,11 @@ public class UploadFilesServlet extends HttpServlet {
 		    // FAQ PDF
 		    filePart = request.getPart("faqPdf");
 		    
-		    File storeDir = new File("C:/AAF/FAQ.pdf");
+		    File storeFile = new File(storeDir + "/FAQ.pdf");
 		    
-		    Files.copy(filePart.getInputStream(), storeDir.toPath());
+		    Files.copy(filePart.getInputStream(), storeFile.toPath());
 	
-		    request.getSession().setAttribute("faqLoc", storeDir.toPath());
+		    request.getSession().setAttribute("faqLoc", storeFile.toPath());
 		    
 			request.getRequestDispatcher("aaf2_files.html").forward(request, response);
 	    
@@ -143,15 +148,8 @@ public class UploadFilesServlet extends HttpServlet {
 		    	
 		    	if (name != null && !name.equals(""))
 		    	{
-		    		System.out.println("file name >" + name + "<");
-		    		try {
-						Thread.sleep(2);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				    File storeDir = new File("C:/AAF/"+ getFilename(file));
-				    Files.copy(file.getInputStream(), storeDir.toPath());
+				    File storeFile = new File(storeDir + "/" + getFilename(file));
+				    Files.copy(file.getInputStream(), storeFile.toPath());
 		    	}
 		    }
 		    

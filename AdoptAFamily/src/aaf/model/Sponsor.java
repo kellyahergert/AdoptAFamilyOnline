@@ -1,11 +1,15 @@
 package aaf.model;
+import java.io.Serializable;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import aaf.model.SponsorEntry.FamilyType;
 
-public class Sponsor extends Person{
+public class Sponsor extends Person implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	int sponId;
 	int numLargeFams;
 	int numMediumFams;

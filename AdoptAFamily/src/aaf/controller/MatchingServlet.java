@@ -63,7 +63,8 @@ public class MatchingServlet extends HttpServlet {
 			SponsorEntry tempEntry;
 			Family tempFamily;
 			
-			FileWriter matchWriter = new FileWriter("C:/AAF/MatchedFamilies.csv");
+			String storeDir = (String) request.getSession().getAttribute("storeDir");
+			FileWriter matchWriter = new FileWriter(storeDir + "/MatchedFamilies.csv");
 			
 			matchWriter.writeToFile(SponsorEntry.getHeader() + "," + Family.getHeader());
 
