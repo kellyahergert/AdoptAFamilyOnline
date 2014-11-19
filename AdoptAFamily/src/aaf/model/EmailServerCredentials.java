@@ -45,7 +45,7 @@ public class EmailServerCredentials implements Serializable{
 	
 	@Override
 	public String toString(){
-		return "\n" + host + " : " + port + " : " + username + " : " + password;
+		return "\n" + host + " : " + port + " : " + username;
 	}
 	
 	
