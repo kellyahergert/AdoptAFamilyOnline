@@ -22,6 +22,8 @@
   <nav>
     <span class="flowCurrent">Email Info</span>
     <span class="arrowFuture">&#8674;</span>
+    <span class="flowFuture">Upload PDFs</span>
+    <span class="arrowFuture">&#8674;</span>
     <span class="flowFuture">Upload Files</span>
     <span class="arrowFuture">&#8674;</span>
     <span class="flowFuture">Family Matching</span>
