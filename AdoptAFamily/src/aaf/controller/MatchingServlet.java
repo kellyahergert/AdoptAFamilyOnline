@@ -10,14 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import aaf.model.EmailServerCredentials;
 import aaf.model.Family;
-import aaf.model.FamilyReader;
-import aaf.model.FileLocations;
 import aaf.model.FileWriter;
 import aaf.model.Sponsor;
 import aaf.model.SponsorEntry;
-import aaf.model.SponsorReader;
+import aaf.model.SponsorEntry.FamilyType;
 
 /**
  * Servlet implementation class MatchingServlet
@@ -60,8 +57,8 @@ public class MatchingServlet extends HttpServlet {
 	    
 	    if (request.getParameter("createMatches") != null)
 	    {
-			SponsorEntry tempEntry;
-			Family tempFamily;
+			SponsorEntry tempEntry = null;
+			Family tempFamily = null;
 			
 			String storeDir = (String) request.getSession().getAttribute("storeDir");
 			FileWriter matchWriter = new FileWriter(storeDir + "/MatchedFamilies.csv");
@@ -70,29 +67,73 @@ public class MatchingServlet extends HttpServlet {
 
 			
 			//let the matching begin!!!!
-			while (!familiesToAdopt.isEmpty() && !sponsorEntries.isEmpty()){
+//			while (!familiesToAdopt.isEmpty() && !sponsorEntries.isEmpty()){
+//				tempFamily = familiesToAdopt.poll();
+//				tempEntry = sponsorEntries.poll();
+//				
+//				matchWriter.writeToFile("\n" + tempEntry + "," + 
+//		                   tempFamily.toString());
+//				
+//				tempEntry.getSponsor().addAdoptedFam(tempEntry.getFamType(), tempFamily);
+//			}
+
+			 PriorityQueue<Family> familiesNotAdopted = new PriorityQueue<Family>();
+
+			 
+			// go thru list of sponsors
+			 // poll a sponsor
+			   // poll from families until a family is a match
+			 
+			//let the matching begin!!!!
+			while (!familiesToAdopt.isEmpty())
+			{
 				tempFamily = familiesToAdopt.poll();
-				tempEntry = sponsorEntries.poll();
-							
-				matchWriter.writeToFile("\n" + tempEntry + "," + 
-		                   tempFamily.toString());
+				System.out.println("Family " + tempFamily.getNumFamilyMembers() + " looking for match");
 				
-				tempEntry.getSponsor().addAdoptedFam(tempEntry.getFamType(), tempFamily);
+				
+//				while (!sponsorEntries.isEmpty())
+//				{
+					tempEntry = sponsorEntries.peek();
+
+					System.out.println("  Try Sponsor " + tempEntry.getFamType());
+					if ((tempEntry.getFamType() == FamilyType.SMALL && tempFamily.getNumFamilyMembers() <= 3) ||
+						(tempEntry.getFamType() == FamilyType.MEDIUM && (tempFamily.getNumFamilyMembers() >= 4 &&
+								                                        tempFamily.getNumFamilyMembers() <= 7)) ||
+						(tempEntry.getFamType() == FamilyType.LARGE && tempFamily.getNumFamilyMembers() >= 5))
+					{
+
+						System.out.println("found a match!");
+						matchWriter.writeToFile("\n" + tempEntry + "," + 
+								tempFamily.toString());
+						
+						tempEntry.getSponsor().addAdoptedFam(tempEntry.getFamType(), tempFamily);
+						sponsorEntries.poll();
+//						break;
+					}
+					else
+					{
+						System.out.println("not adopted");
+						familiesNotAdopted.add(tempFamily);
+					}
+//				}
+				
 			}
 			
 			matchWriter.close();
 			
-			System.out.println(familiesToAdopt.size() + " families not adopted");
+			System.out.println(familiesNotAdopted.size() + " families not adopted");
 			
-			Family thisFam;
-			while (!familiesToAdopt.isEmpty()){
-				thisFam = familiesToAdopt.poll();
+			// save leftover families and sponsor entries for sending rejection emails
+			request.getSession().setAttribute("unmatchedFamilies", familiesNotAdopted);
+			request.getSession().setAttribute("unmatchedSponsors", sponsorEntries);
+			
+			for (Family thisFam : familiesNotAdopted)
+			{
 				System.out.println(thisFam.getId() + " - " + thisFam.getFamilyName() + " family was not adopted :(");
 			}
 			
-			SponsorEntry thisSpon;
-			while (!sponsorEntries.isEmpty()){
-				thisSpon = sponsorEntries.poll();
+			for (SponsorEntry thisSpon : sponsorEntries)
+			{
 				System.out.println(thisSpon.getSponsor().getSponId() + " - " +  thisSpon.getSponsor().getLastName() + " family had no family to adopt :(");
 			}
 	    	

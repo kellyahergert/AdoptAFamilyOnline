@@ -3,11 +3,7 @@ package aaf.controller;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
@@ -86,6 +82,24 @@ public class UploadFilesServlet extends HttpServlet {
 		    request.getSession().setAttribute("sponsorEmailText", sponsorEmailText);
 		    
 		    
+		    // nominator waitlisted email text
+		    filePart = request.getPart("nominatorWaitListEmailTextFile");
+		    
+		    Scanner nominatorWaitListEmail = new Scanner(filePart.getInputStream());
+		    String nominatorWaitListEmailText = "";
+		    
+		    while (nominatorWaitListEmail.hasNextLine())
+		    {
+		    	nominatorWaitListEmailText += nominatorWaitListEmail.nextLine();
+		    }
+		    
+		    nominatorWaitListEmail.close();
+		    
+		    System.out.println("nom waitlisted email text " + nominatorWaitListEmailText);
+	
+		    request.getSession().setAttribute("nominatorWaitListedEmailText", nominatorWaitListEmailText);
+		    
+		    
 		    // nominator email text
 		    filePart = request.getPart("nominatorEmailTextFile");
 		    
@@ -133,7 +147,20 @@ public class UploadFilesServlet extends HttpServlet {
 	
 		    request.getSession().setAttribute("faqLoc", storeFile.toPath().toString());
 		    
+			
+		    // Sponsor Obligation PDF
+		    filePart = request.getPart("sponsorObligationsPdf");
+		    
+		    File sponObligationStoreFile = new File(storeDir + "/Sponsor_Obligations.pdf");
+		    
+		    Files.copy(filePart.getInputStream(), sponObligationStoreFile.toPath());
+	
+		    request.getSession().setAttribute("sponObligationLoc", sponObligationStoreFile.toPath().toString());
+		    
+		    
+		    // all files uploaded, go to next page
 			request.getRequestDispatcher("aaf3_family_matching.html").forward(request, response);
+			
 	    
 		}
 		else if (request.getParameter("goToAaf2_1") != null)

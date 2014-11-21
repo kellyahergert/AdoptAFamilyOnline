@@ -52,6 +52,7 @@
 <section>
   <form method="POST" action="RunServlet">
     <h2>Send All Emails</h2>
+    <p><input name="sendEmailsCheckbox" type="checkbox">&nbsp;&nbsp;Send Emails</p>
     <p><input type=submit name=run value="Run!"></p>
   </form>
 </section>

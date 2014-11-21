@@ -17,7 +17,7 @@ public class EmailConverter {
 	public static void main(String[] args) throws FileNotFoundException 
 	{
 		Sponsor sponsor = new Sponsor(1, "Chase", "Johnson", "test@test.com", 1, 2, 3);
-		Scanner in = new Scanner(new FileReader("C:/aaf_test/SponsorEmailHTML.txt"));
+		Scanner in = new Scanner(new FileReader("C:/aaf_test/1_MatchedSponsorEmailHTML.txt"));
 		
 		String text = "";
 		
@@ -35,8 +35,9 @@ public class EmailConverter {
 		Family family = new Family(1, nominator, "Sherlock", "Katie", "SSherlock",
 				"family@fam.com", 5, "test");
 		
-		Scanner in2 = new Scanner(new FileReader("C:/aaf_test/NominatorEmailHTML.txt"));
-		
+		Scanner in2 = new Scanner(new FileReader("C:/aaf_test/3_WaitListEmailHTML.txt"));
+//		Scanner in2 = new Scanner(new FileReader("C:/aaf_test/2_MatchedNominatorEmailHTML.txt"));
+
 		String text2 = "";
 		
 		while(in2.hasNextLine())

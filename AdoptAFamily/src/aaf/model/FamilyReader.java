@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Scanner;
 
 
@@ -28,10 +29,17 @@ public class FamilyReader {
 		this.familyInputStream = familyInputStream;
 		this.storeDir = storeDir;
 	}
-
+	
 	public PriorityQueue<Family> createFamilyObjects() throws FileNotFoundException {
 		
 		PriorityQueue<Family> families = new PriorityQueue<Family>();
+		
+		createFamilyObjects(families);
+		
+		return families;
+	}
+	
+	public void createFamilyObjects(Queue<Family> families) throws FileNotFoundException {
 		
 		Scanner in = new Scanner(this.familyInputStream);
 		
@@ -70,7 +78,7 @@ public class FamilyReader {
 				}
 				
 				noSpaceName = noSpaceName.replaceAll("\\s", "");
-				attachmentName = storeDir + "/" + noSpaceName + ".pdf";
+				attachmentName = storeDir + "/" + numFamMembers + " " + noSpaceName + ".pdf";
 				
 				File testAttachment = new File(attachmentName);
 				boolean attachmentExists = testAttachment.exists();
@@ -97,8 +105,6 @@ public class FamilyReader {
 		System.out.println("Failed to find " + count + " attachments");
 		
 		in.close();
-		
-		return families;
 		
 	}
 	

@@ -68,10 +68,36 @@ public class BasicEmailSender {
 	
 	public String sendEmail(String theSubject, String theText, String theToAddress)
 	{
-		return sendEmail(theSubject, theText, theToAddress, new LinkedList<MimeBodyPart>());
+		boolean success = sendEmailBool(theSubject, theText, theToAddress);
+		if (success)
+		{
+			return "Email sent successfully!";
+		}
+		else
+		{
+			return "Failed to send email";
+		}
+	}
+	
+	public boolean sendEmailBool(String theSubject, String theText, String theToAddress)
+	{
+		return sendEmailBool(theSubject, theText, theToAddress, new LinkedList<MimeBodyPart>());
 	}
 	
 	public String sendEmail(String theSubject, String theText, String theToAddress, LinkedList<MimeBodyPart> attachments)
+	{
+		boolean success = sendEmailBool(theSubject, theText, theToAddress, attachments);
+		if (success)
+		{
+			return "Email sent successfully!";
+		}
+		else
+		{
+			return "Failed to send email";
+		}
+	}
+	
+	public boolean sendEmailBool(String theSubject, String theText, String theToAddress, LinkedList<MimeBodyPart> attachments)
 	{
 		try
 		{
@@ -116,12 +142,12 @@ public class BasicEmailSender {
 			}
 			
 			System.out.println("---Sent message successfully to " + theToAddress + "....");
-			return "Email sent successfully!";
+			return true;
 		}
 		catch (MessagingException mex)
 		{			
-			mex.printStackTrace();
-			return "Failed to send email";
+			System.out.println(mex.getMessage());
+			return false;
 		}
 	}
 	
