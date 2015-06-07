@@ -79,6 +79,8 @@ public class RunServlet extends HttpServlet {
 //			}
 //		}
 
+		request.getSession().setMaxInactiveInterval(3*60*60); // 3 hour session timeout, cause it's sad when this times out
+		
 		for(Sponsor sponsor : sponsors){
 			System.out.println("Sending email to " + sponsor.getSponId());
 			
