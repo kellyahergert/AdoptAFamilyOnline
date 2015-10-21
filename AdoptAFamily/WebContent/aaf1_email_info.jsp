@@ -3,13 +3,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!--   -----Added automatically by Eclipse, not needed?
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-</head>
--->
-
 <head>
   <meta charset="UTF-8">
   <title>Email Setup - Adopt a Family</title>
@@ -36,13 +29,24 @@
   <form method="POST" action="EmailSenderServlet">
     <h2>Email Info</h2>
     <p><label><span class=label_1>Mail Server IP Address: </span>
-      <input type=text name="smtpServerIP" placeholder="smtp.comcast.net" maxlength="100" value="${smtpServerIP}" required></label>
+      <input type=text list=mailServerList name="smtpServerIP" maxlength="100" value="${smtpServerIP}" required>
+      <datalist id=mailServerList>
+        <option label="smtp.comcast.net" value="smtp.comcast.net">
+        <option label="10.10.16.226" value="10.10.16.226">
+      </datalist>
+      </label>
     </p>
     <p><label><span class=label_1>Mail Server Port: </span>
-      <input type=text name="smtpServerPort" placeholder="587" maxlength="5" value="${smtpServerPort}" required></label>
+      <input type=text list=portList name="smtpServerPort" maxlength="5" value="${smtpServerPort}" required></label>
+      <datalist id=portList>
+        <option label="587" value="587">
+      </datalist>
     </p>
     <p><label><span class=label_1>Email Login: </span>
-      <input type=text name="smtpServerLogin" placeholder="jordhergert@comcast.net" maxlength="100" value="${smtpServerLogin}"></label>
+      <input type=text list=loginList name="smtpServerLogin" maxlength="100" value="${smtpServerLogin}"></label>
+      <datalist id=loginList>
+        <option label="jordhergert@comcast.net" value="jordhergert@comcast.net">
+      </datalist>
     </p>
     <p><label><span class=label_1>Email Password: </span>
       <input type=password name="smtpServerPassword" value="${smtpServerPassword}"></label>
@@ -50,12 +54,19 @@
 
     <h3>Send Test email</h3>
     <p><label><span class=label_3>"Sender" Email Address: </span>
-      <input type=email name="testEmailFromAddr" maxlength="100" value=""></label>
+      <input type=email list=fromEmailList name="testEmailFromAddr" maxlength="100" value=""></label>
+      <datalist id=fromEmailList>
+        <option label="test@monkey.com" value="test@monkey.com">
+      </datalist>
     </p>
     <p>
       <label>
         <span class=label_3>Send test email to this email address: </span>
-        <span class=label_1><input type=email name="testEmailToAddr" maxlength="100" value=""></span>
+        <span class=label_1><input type=email list=toEmailList name="testEmailToAddr" maxlength="100" value=""></span>
+        <datalist id=toEmailList>
+          <option label="jordhergert@gmail.com" value="jordhergert@gmail.com">
+          <option label="kellyahergert@gmail.com" value="kellyahergert@gmail.com">
+        </datalist>
       </label>
       <input type=submit name="sendTestSponsorEmail" value="Send Test Email">
     </p>
