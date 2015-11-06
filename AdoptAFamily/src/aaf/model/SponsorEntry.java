@@ -1,6 +1,8 @@
 package aaf.model;
 
-public class SponsorEntry implements Comparable<SponsorEntry>{
+import java.io.Serializable;
+
+public class SponsorEntry implements Comparable<SponsorEntry>, Serializable{
 
 	public enum FamilyType{LARGE, MEDIUM, SMALL}
 	

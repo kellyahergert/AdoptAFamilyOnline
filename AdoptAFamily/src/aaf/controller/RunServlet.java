@@ -1,11 +1,10 @@
 package aaf.controller;
 
-import java.io.FileReader;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
-import java.util.Scanner;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -33,6 +32,8 @@ import aaf.model.SponsorEntry.FamilyType;
 public class RunServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	static final String attachmentSuffix = "FamilyWishList.pdf";
+//	// Un-comment this variable for testing
+//	private static final long sleepTimeWithoutEmails = 1000 * 10; // sleep 10 seconds between all emails
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -47,7 +48,7 @@ public class RunServlet extends HttpServlet {
 	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("RUNNING!!!!!!!!!");
-		
+		System.out.println(Calendar.getInstance().getTime());
 		String totalSuccess = "";
 		
 		request.getRequestDispatcher("aaf4_run.jsp").forward(request, response);
@@ -79,7 +80,8 @@ public class RunServlet extends HttpServlet {
 //			}
 //		}
 
-		request.getSession().setMaxInactiveInterval(3*60*60); // 3 hour session timeout, cause it's sad when this times out
+		// un-comment to prove that timout issue is fixed below
+		request.getSession().setMaxInactiveInterval(8*60*60); // 8 hour session timeout, cause it's sad when this times out
 		
 		for(Sponsor sponsor : sponsors){
 			System.out.println("Sending email to " + sponsor.getSponId());
@@ -124,6 +126,7 @@ public class RunServlet extends HttpServlet {
 			}
 			sponsorWriter.writeToFile("\n\nTO:" + sponsor.getEmailAddress() + "\n" + sponsorEmailText + "\n========================================\n");
 			
+			// Sponsor emails
 			if (actuallySendEmails)
 			{
 				String sponSuccess = emailSender.sendEmail("Adopt A Family Information", sponsorEmailText, sponsor.getEmailAddress(), attachments);
@@ -137,6 +140,17 @@ public class RunServlet extends HttpServlet {
 					e.printStackTrace();
 				}
 			}
+//			// un-comment this code block for testing
+//			else if (sleepTimeWithoutEmails > 0)
+//			{
+//				System.out.println("Waiting " + sleepTimeWithoutEmails/1000 + " seconds instead of sending email to sponsor " + sponsor.getSponId());
+//				try {
+//					Thread.sleep(sleepTimeWithoutEmails);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//				System.out.println(Calendar.getInstance().getTime());
+//			}
 			
 			// let nominator of each adopted family know their family was adopted
 			FileWriter nominatorWriter = new FileWriter(storeDir + "/NominatorEmails.doc");
@@ -160,6 +174,17 @@ public class RunServlet extends HttpServlet {
 						e.printStackTrace();
 					}
 				}
+//				// un-comment this code block for testing
+//				else if (sleepTimeWithoutEmails > 0)
+//				{
+//					System.out.println("Waiting " + sleepTimeWithoutEmails/1000 + " seconds instead of sending email to nominator of family " + family.getId());
+//					try {
+//						Thread.sleep(sleepTimeWithoutEmails);
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//					System.out.println(Calendar.getInstance().getTime());
+//				}
 				
 			}
 			nominatorWriter.close();
@@ -217,7 +242,16 @@ public class RunServlet extends HttpServlet {
 					e.printStackTrace();
 				}	
 			}
-
+//			// un-comment this code block for testing
+//			else if (sleepTimeWithoutEmails > 0)
+//			{
+//				System.out.println("Waiting " + sleepTimeWithoutEmails/1000 + " seconds instead of sending waitlist email to nominator of family " + fam.getId());
+//				try {
+//					Thread.sleep(sleepTimeWithoutEmails);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//			}
 
 		}
 		
