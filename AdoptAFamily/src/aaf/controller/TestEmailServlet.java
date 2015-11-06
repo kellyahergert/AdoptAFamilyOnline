@@ -54,6 +54,18 @@ public class TestEmailServlet extends HttpServlet {
 			
 			emailSender.sendEmail("Adopt A Family Information", nominatorEmailText, family.getNominator().getEmailAddress()); 
 		}
+		else if (request.getParameter("sendTestWaitListEmail") != null)
+		{
+			String waitListedEmailText = (String) request.getSession().getAttribute("nominatorWaitListedEmailText");
+			Person nominator = new Person("Brooke", "Nominator", request.getParameter("testEmail"));
+			Family family = new Family(1, nominator, "Sherlock", "Katie", "SSherlock",
+					"family@fam.com", 5, "test");
+			System.out.println(waitListedEmailText);
+			System.out.println(family);
+			waitListedEmailText = EmailConverter.convertNominatorEmailText(waitListedEmailText, family);
+			
+			emailSender.sendEmail("Adopt A Family Information", waitListedEmailText, family.getNominator().getEmailAddress()); 
+		}
 		
 		request.getRequestDispatcher("aaf4_run.jsp").forward(request, response);
 		
