@@ -32,7 +32,7 @@ import aaf.model.SponsorEntry.FamilyType;
 public class RunServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	static final String attachmentSuffix = "FamilyWishList.pdf";
-//	// Un-comment this variable for testing
+//	// Un-comment this variable for testing. 20 second sleep caused 2014 test data to take 4hr 15min to run
 //	private static final long sleepTimeWithoutEmails = 1000 * 10; // sleep 10 seconds between all emails
        
     /**

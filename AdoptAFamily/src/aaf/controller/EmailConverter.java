@@ -66,6 +66,7 @@ public class EmailConverter {
 	{
 		String convertedText = text.replaceAll("\\[Person\\.FirstName\\]", family.getNominator().getFirstName());
 		convertedText = convertedText.replaceAll("\\[Family\\.FamilyName\\]", family.getFamilyName());
+		convertedText = convertedText.replaceAll("\\[Family\\.Id\\]", Integer.toString(family.getId()));
 		return convertedText;
 	}
 
