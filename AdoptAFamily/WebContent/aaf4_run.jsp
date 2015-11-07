@@ -25,26 +25,40 @@
 </header>
 
 <section>
-  <h2>Previews</h2>
-  <!-- <p><a href=servletSponsorEmailPreview target=_>Sponsor Email Preview</a></p> -->
+  <h2>Email Previews</h2>
+  <datalist id=emailAddressList>
+    <option label="jordhergert@gmail.com" value="jordhergert@gmail.com">
+    <option label="kellyahergert@gmail.com" value="kellyahergert@gmail.com">
+    <option label="jlittlejohn@denrescue.org" value="jlittlejohn@denrescue.org">
+  </datalist>
+  
   <form method="POST" action="TestEmailServlet">
     <p>
       <label>
         <span class=label_4>Send test Sponsor email to this email address: </span>
-        <span class=label_1><input type=email name=testEmail required></span>
+        <span class=label_1><input type=email list=emailAddressList name=testEmail required></span>
       </label>
       <input type=submit name=sendTestSponsorEmail value="Send Test Email">
     </p>
   </form>
   
-  <!-- <p><a href=nominatorEmailPreview  target=_>Nominator Email Preview</a></p> -->
   <form method="POST" action="TestEmailServlet">
     <p>
       <label>
         <span class=label_4 style="font-size:85%">Send test Nominator email to this email address: </span>
-        <span class=label_1><input type=email name=testEmail required></span>
+        <span class=label_1><input type=email list=emailAddressList name=testEmail required></span>
       </label>
       <input type=submit name=sendTestNominatorEmail value="Send Test Email">
+    </p>
+  </form>
+  
+  <form method="POST" action="TestEmailServlet">
+    <p>
+      <label>
+        <span class=label_4 style="font-size:85%">Send test Wait List email to this email address: </span>
+        <span class=label_1><input type=email list=emailAddressList name=testEmail required></span>
+      </label>
+      <input type=submit name=sendTestWaitListEmail value="Send Test Email">
     </p>
   </form>
 </section>
@@ -57,8 +71,8 @@
   </form>
 </section>
 <br>
-<!-- Post status with below variable -->
-<pre style="color:white;">${statusMsg}</pre>
+
+<pre style="color:white;padding-left:33px;">${statusMsg}</pre>
 
 <footer>
 </footer>
