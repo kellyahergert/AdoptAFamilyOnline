@@ -173,7 +173,6 @@ public class BasicEmailSender {
 				{
 					// uncomment this block to inject exceptions for testing purposes
 //					int rand = (int) (Math.random() * 10);
-//					System.out.println(rand);
 //					if (rand % 2 == 0)
 //					{
 //						throw new MessagingException("Test Msg Exception");
