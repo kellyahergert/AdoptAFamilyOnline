@@ -157,20 +157,16 @@ public class BasicEmailSender {
 //					{
 //						throw new MessagingException("Test Msg Exception");
 //					}
-					try {
 
-						Transport transport = mySession.getTransport();
-						
-						transport.connect(myServerCredentials.getHost(),
-						  myServerCredentials.getPort(),
-						  myServerCredentials.getUsername(),
-						  myServerCredentials.getPassword());
-						
-						// send the email
-						transport.sendMessage(message, message.getAllRecipients());
-					} catch (MessagingException e) {
-						e.printStackTrace();
-					}
+					Transport transport = mySession.getTransport();
+					
+					transport.connect(myServerCredentials.getHost(),
+					  myServerCredentials.getPort(),
+					  myServerCredentials.getUsername(),
+					  myServerCredentials.getPassword());
+					
+					// send the email
+					transport.sendMessage(message, message.getAllRecipients());
 				}
 				else
 				{
