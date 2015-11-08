@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class SponsorEntry implements Comparable<SponsorEntry>, Serializable{
 
+	private static final long serialVersionUID = 1L;
+
 	public enum FamilyType{LARGE, MEDIUM, SMALL}
 	
 	FamilyType famType;

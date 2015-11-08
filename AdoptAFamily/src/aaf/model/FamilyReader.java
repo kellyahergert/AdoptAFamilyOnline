@@ -57,7 +57,7 @@ public class FamilyReader {
 			String nomFirstName = camelCaseString(tokens[nomFirstNameIndex]);
 			String nomLastName = camelCaseString(tokens[nomLastNameIndex]);
 			String nomEmailAddress = tokens[nomEmailAddressIndex];
-			Person nominator = new Person(nomFirstName, nomLastName, nomEmailAddress);
+			Nominator nominator = new Nominator(nomFirstName, nomLastName, nomEmailAddress);
 			
 			String familyName = camelCaseString(tokens[familyNameIndex]);
 			String firstName = camelCaseString(tokens[firstNameIndex]);

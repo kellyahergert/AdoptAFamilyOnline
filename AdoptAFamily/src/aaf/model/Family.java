@@ -2,19 +2,37 @@ package aaf.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class Family extends Person implements Comparable<Family>, Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int id;
+	
+	@Id
+	private long id;
 	private String familyName;
 	private int numFamilyMembers;
 	private String attachmentName;
-	private Person nominator;
+	private Nominator nominator;
 
-	public Family(int id, Person nominator, String familyName, String firstName, String lastName,
+	/**
+	 * objectdb seems to need a default constructor
+	 */
+	public Family() {
+		super("", "", "");
+		this.id = 0;
+		this.setNominator(null);
+		this.familyName = "";
+		this.numFamilyMembers = 0;
+		this.attachmentName = "";
+	}
+	
+	public Family(int id, Nominator nominator, String familyName, String firstName, String lastName,
 			String emailAddress, int numFamilyMembers, String attachmentName) {
 		super(firstName, lastName, emailAddress);
 		this.id = id;
@@ -25,7 +43,7 @@ public class Family extends Person implements Comparable<Family>, Serializable {
 	}
 
 	public int getId() {
-		return id;
+		return (int) id;
 	}
 
 	public String getFamilyName() {
@@ -44,7 +62,7 @@ public class Family extends Person implements Comparable<Family>, Serializable {
 		return nominator;
 	}
 
-	public void setNominator(Person nominator) {
+	public void setNominator(Nominator nominator) {
 		this.nominator = nominator;
 	}
 
