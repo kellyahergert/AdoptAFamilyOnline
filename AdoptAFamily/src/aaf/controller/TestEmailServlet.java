@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import aaf.model.EmailServerCredentials;
 import aaf.model.Family;
-import aaf.model.Person;
+import aaf.model.Nominator;
 import aaf.model.Sponsor;
 
 /**
@@ -45,7 +45,7 @@ public class TestEmailServlet extends HttpServlet {
 		else if (request.getParameter("sendTestNominatorEmail") != null)
 		{
 			String nominatorEmailText = (String) request.getSession().getAttribute("nominatorEmailText");
-			Person nominator = new Person("Brooke", "Nominator", request.getParameter("testEmail"));
+			Nominator nominator = new Nominator("Brooke", "Nominator", request.getParameter("testEmail"));
 			Family family = new Family(1, nominator, "Sherlock", "Katie", "SSherlock",
 					"family@fam.com", 5, "test");
 			System.out.println(nominatorEmailText);
@@ -57,7 +57,7 @@ public class TestEmailServlet extends HttpServlet {
 		else if (request.getParameter("sendTestWaitListEmail") != null)
 		{
 			String waitListedEmailText = (String) request.getSession().getAttribute("nominatorWaitListedEmailText");
-			Person nominator = new Person("Brooke", "Nominator", request.getParameter("testEmail"));
+			Nominator nominator = new Nominator("Brooke", "Nominator", request.getParameter("testEmail"));
 			Family family = new Family(1, nominator, "Sherlock", "Katie", "SSherlock",
 					"family@fam.com", 5, "test");
 			System.out.println(waitListedEmailText);

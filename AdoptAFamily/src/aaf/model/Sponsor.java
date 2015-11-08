@@ -2,14 +2,20 @@ package aaf.model;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 import aaf.model.SponsorEntry.FamilyType;
 
+@Entity
 public class Sponsor extends Person implements Serializable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	@Id
 	int sponId;
 	int numLargeFams;
 	int numMediumFams;
@@ -24,6 +30,18 @@ public class Sponsor extends Person implements Serializable{
 		this.numLargeFams = numLargeFams;
 		this.numMediumFams = numMediumFams;
 		this.numSmallFams = numSmallFams;
+	}
+	
+	/**
+	 * objectdb seems to need a default constructor
+	 */
+	public Sponsor()
+	{
+		super("", "", "");
+		this.sponId = 0;
+		this.numLargeFams = 0;
+		this.numMediumFams = 0;
+		this.numSmallFams = 0;	
 	}
 
 	public void addAdoptedFam(FamilyType famType, Family adoptedFamily) {

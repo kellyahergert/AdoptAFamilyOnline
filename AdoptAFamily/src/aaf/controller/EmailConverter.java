@@ -1,15 +1,11 @@
 package aaf.controller;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
 
 import aaf.model.Family;
-import aaf.model.Person;
+import aaf.model.Nominator;
 import aaf.model.Sponsor;
 
 public class EmailConverter {
@@ -31,7 +27,7 @@ public class EmailConverter {
 		String convertedText = EmailConverter.convertSponsorEmailText(text, sponsor);
 		System.out.println(convertedText);
 		
-		Person nominator = new Person("Brooke", "Nominator", "nominator@nom.com");
+		Nominator nominator = new Nominator("Brooke", "Nominator", "nominator@nom.com");
 		Family family = new Family(1, nominator, "Sherlock", "Katie", "SSherlock",
 				"family@fam.com", 5, "test");
 		
