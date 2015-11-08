@@ -23,7 +23,6 @@ public class BasicEmailSender {
 	protected String myFromAddress = "";
 	protected EmailServerCredentials myServerCredentials;
 	protected Session mySession;
-	Transport myTransport;
 
 	/**
 	 * Main method is for testing purposes only
@@ -75,25 +74,6 @@ public class BasicEmailSender {
 			};
 
 			mySession = Session.getInstance(properties, auth);
-			
-			// try to connect a maximum of 50 times, should only take one
-			for (int i=0; i < 50; i++)
-			{
-				try {
-
-					// save the transport object so each email is sent through the same
-					// connection, this prevents error 421 (too many concurrent sessions)
-					myTransport = mySession.getTransport();
-					
-					myTransport.connect(myServerCredentials.getHost(),
-					  myServerCredentials.getPort(),
-					  myServerCredentials.getUsername(),
-					  myServerCredentials.getPassword());
-					return;
-				} catch (MessagingException e) {
-					e.printStackTrace();
-				}
-			}
 
 		}
 		else
@@ -177,8 +157,20 @@ public class BasicEmailSender {
 //					{
 //						throw new MessagingException("Test Msg Exception");
 //					}
-					
-					myTransport.sendMessage(message, message.getAllRecipients());
+					try {
+
+						Transport transport = mySession.getTransport();
+						
+						transport.connect(myServerCredentials.getHost(),
+						  myServerCredentials.getPort(),
+						  myServerCredentials.getUsername(),
+						  myServerCredentials.getPassword());
+						
+						// send the email
+						transport.sendMessage(message, message.getAllRecipients());
+					} catch (MessagingException e) {
+						e.printStackTrace();
+					}
 				}
 				else
 				{
