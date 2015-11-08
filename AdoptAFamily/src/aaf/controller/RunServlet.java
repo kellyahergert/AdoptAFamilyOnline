@@ -60,6 +60,8 @@ public class RunServlet extends HttpServlet {
 //	    PriorityQueue<Family> families = (PriorityQueue<Family>) request.getSession().getAttribute("families");
 	    
 		EmailServerCredentials creds = (EmailServerCredentials) request.getSession().getAttribute(SessionAttributeConstants.SERVER_CREDS_KEY);
+		
+		//TODO don't hardcode sender address
 		BasicEmailSender emailSender = new BasicEmailSender("JLittlejohn@DenRescue.org", creds);
 		
 		boolean actuallySendEmails = (request.getParameter("sendEmailsCheckbox") != null);
@@ -219,6 +221,10 @@ public class RunServlet extends HttpServlet {
 		
 		for (Family fam : unmatchedFamilies)
 		{
+			//TODO take code from SendEmailFromCSV (and delete that class) to send these emails
+			// from info in a csv instead of info stored in the session... have MatchingServlet
+			// write out the needed csv
+			
 			System.out.println("emailing " + fam.getId());
 			String famWaitlistEmailText = (String) request.getSession().getAttribute("nominatorWaitListedEmailText");
 			
