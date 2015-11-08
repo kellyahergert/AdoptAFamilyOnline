@@ -86,12 +86,19 @@ span.label_3 {
   float:left;
 }
 span.label_4 {
+  width: 290px;
+  display:block;
+  float:left;
+  font-size: 90%;
+}
+span.label_5 {
   width: 300px;
   display:block;
   float:left;
-  font-size: 88%;
+  font-size: 82%;
 }
 input {
+  display:block;
   float:left;
 }
 p {
@@ -108,10 +115,9 @@ label {
 
 section {
   background-color:white;
-  width:630px;
-/*min-width:625px;
-  max-width:900px;*/
-  margin-right:34%;
+  min-width:640px;
+  max-width:700px;
+  margin-right:20%;
   margin-left:30px;
   margin-top:45px;
   margin-bottom:10px;

@@ -25,7 +25,7 @@
 <section>
   <form method="POST" action="UploadFilesServlet" enctype="multipart/form-data">
     <h2>Files:</h2>
-    
+
     <p><label><span class=label_4>Text for Email to Sponsors: </span>
       <input type=file name="sponsorEmailTextFile" required></label>
     </p>
@@ -34,7 +34,7 @@
     </p>
      <p><label><span class=label_4>Text for Email to WaitListed Nominators: </span>
       <input type=file name="nominatorWaitListEmailTextFile" required></label>
-    </p>   
+    </p>
     <p><label><span class=label_4>Families CSV: </span>
       <input type=file name="familyCSV" required></label>
     </p>
@@ -44,12 +44,12 @@
     <p><label><span class=label_4>FAQ pdf: </span>
       <input type=file name="faqPdf" required></label>
     </p>
-     <p><label><span class=label_4>Sponsor Obligations pdf: </span>
+    <p><label><span class=label_4>Sponsor Obligations pdf: </span>
       <input type=file name="sponsorObligationsPdf" required></label>
     </p>
-   
+    <p><label><input type="checkbox" name="clearDatabase"><span class=label_4>&nbsp;Clear database</span></label></p>
+    <p><label><input type="checkbox" name="loadDatabase"><span class=label_4>&nbsp;Load into database</span></label></p>
     <p><input type="submit" name="goToAaf3" value="Continue to Family Matching"></p><br>
-    
   </form>
 </section>
 

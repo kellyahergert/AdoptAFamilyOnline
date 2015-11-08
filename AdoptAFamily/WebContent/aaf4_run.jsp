@@ -35,7 +35,7 @@
   <form method="POST" action="TestEmailServlet">
     <p>
       <label>
-        <span class=label_4>Send test Sponsor email to this email address: </span>
+        <span class=label_5>Send test Sponsor email to this email address: </span>
         <span class=label_1><input type=email list=emailAddressList name=testEmail required></span>
       </label>
       <input type=submit name=sendTestSponsorEmail value="Send Test Email">
@@ -45,7 +45,7 @@
   <form method="POST" action="TestEmailServlet">
     <p>
       <label>
-        <span class=label_4 style="font-size:85%">Send test Nominator email to this email address: </span>
+        <span class=label_5>Send test Nominator email to this email address: </span>
         <span class=label_1><input type=email list=emailAddressList name=testEmail required></span>
       </label>
       <input type=submit name=sendTestNominatorEmail value="Send Test Email">
@@ -55,7 +55,7 @@
   <form method="POST" action="TestEmailServlet">
     <p>
       <label>
-        <span class=label_4 style="font-size:85%">Send test Wait List email to this email address: </span>
+        <span class=label_5>Send test Wait List email to this email address: </span>
         <span class=label_1><input type=email list=emailAddressList name=testEmail required></span>
       </label>
       <input type=submit name=sendTestWaitListEmail value="Send Test Email">
