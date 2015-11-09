@@ -23,6 +23,7 @@ import aaf.model.FamilyReader;
 import aaf.model.Sponsor;
 import aaf.model.SponsorEntry;
 import aaf.model.SponsorReader;
+import aaf.model.StorageManager;
 
 
 /**
@@ -156,7 +157,22 @@ public class UploadFilesServlet extends HttpServlet {
 		    Files.copy(filePart.getInputStream(), sponObligationStoreFile.toPath());
 	
 		    request.getSession().setAttribute("sponObligationLoc", sponObligationStoreFile.toPath().toString());
+		   
 		    
+		    StorageManager storageMgr = new StorageManager();
+		    
+		    String clearDatabase = request.getParameter("clearDatabase");
+		    if(clearDatabase.equals("on"))
+		    {
+		    	storageMgr.deleteAllData();
+		    }
+		    
+		    String loadDatabase = request.getParameter("loadDatabase");
+		    if(loadDatabase.equals("on"))
+		    {
+		    	storageMgr.storeFamilies(families);
+		    	storageMgr.storeSponsors(sponsors);
+		    }
 		    
 		    // all files uploaded, go to next page
 			request.getRequestDispatcher("aaf3_family_matching.html").forward(request, response);
