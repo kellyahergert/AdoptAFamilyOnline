@@ -116,11 +116,10 @@ public class BasicEmailSender {
 	
 	public boolean sendEmailBool(String theSubject, String theText, String theToAddress, LinkedList<MimeBodyPart> attachments)
 	{
-		
 		long waitTime = 100;
 
-		// try sending the email a maximum of 100 times... it shouldn't take this many tries
-		for (int i=0; i < 100; i++)
+		final int FIVE_MINUTES = 300000;
+		while (waitTime <= FIVE_MINUTES) // break from loop on success or wait time of 5 minutes
 		{
 			try
 			{
@@ -191,17 +190,7 @@ public class BasicEmailSender {
 				e.printStackTrace();
 			}
 			
-			final int FIVE_MINUTES = 300000;
-			if (waitTime <= FIVE_MINUTES)
-			{
-				waitTime *= 2;
-			}
-			else
-			{
-				// reset the wait time so it doesn't get too high
-				waitTime = 100;
-			}		
-			
+			waitTime *= 2;
 		}
 		return false;
 	}
