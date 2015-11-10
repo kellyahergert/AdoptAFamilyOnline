@@ -162,13 +162,13 @@ public class UploadFilesServlet extends HttpServlet {
 		    StorageManager storageMgr = new StorageManager();
 		    
 		    String clearDatabase = request.getParameter("clearDatabase");
-		    if(clearDatabase.equals("on"))
+		    if (clearDatabase != null && clearDatabase.equals("on"))
 		    {
 		    	storageMgr.deleteAllData();
 		    }
 		    
 		    String loadDatabase = request.getParameter("loadDatabase");
-		    if(loadDatabase.equals("on"))
+		    if (loadDatabase != null && loadDatabase.equals("on"))
 		    {
 		    	storageMgr.storeFamilies(families);
 		    	storageMgr.storeSponsors(sponsors);
