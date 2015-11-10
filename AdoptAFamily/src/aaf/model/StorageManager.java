@@ -9,6 +9,7 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceException;
 import javax.persistence.RollbackException;
 
 public class StorageManager {
@@ -66,15 +67,30 @@ public class StorageManager {
 	public void deleteAllData()
 	{
         EntityManager em = getConnection();
-        
-		em.getTransaction().begin();
+       try
+       {
+			em.getTransaction().begin();
 
-        em.createQuery("DELETE FROM Family").executeUpdate();
-        em.createQuery("DELETE FROM Sponsor").executeUpdate();
-        em.createQuery("DELETE FROM Nominator").executeUpdate();
-        em.createQuery("DELETE FROM Person").executeUpdate();
-		
-		em.getTransaction().commit();
+			em.createQuery("DELETE FROM Family").executeUpdate();
+			em.createQuery("DELETE FROM Sponsor").executeUpdate();
+			em.createQuery("DELETE FROM Nominator").executeUpdate();
+			em.createQuery("DELETE FROM Person").executeUpdate();
+			
+			em.getTransaction().commit();
+        }
+		catch (PersistenceException e)
+		{
+			System.out.println("No data to delete from database: " + e.getMessage());
+        }
+        finally 
+        {
+            // Close the database connection:
+            if (em.getTransaction().isActive())
+            {
+                em.getTransaction().rollback();
+            }
+            em.close();
+        }
 	}
 	
 	/**
