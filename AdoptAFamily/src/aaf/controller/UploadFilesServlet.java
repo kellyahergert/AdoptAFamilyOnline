@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
@@ -125,6 +126,8 @@ public class UploadFilesServlet extends HttpServlet {
 		    SponsorReader sponsorReader = new SponsorReader(filePart.getInputStream());
 		    LinkedList<Sponsor> sponsors = sponsorReader.createSponsorObjects();
 		    PriorityQueue<SponsorEntry> sponsorEntries = sponsorReader.getSponsorEntries();
+		    
+		    Collections.sort(sponsors);
 		    
 		    request.getSession().setAttribute("sponsors", sponsors);
 		    request.getSession().setAttribute("sponsorEntries", sponsorEntries);

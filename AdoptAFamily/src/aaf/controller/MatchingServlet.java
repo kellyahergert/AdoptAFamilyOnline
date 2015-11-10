@@ -101,7 +101,8 @@ public class MatchingServlet extends HttpServlet {
 								                                        tempFamily.getNumFamilyMembers() <= 7)) ||
 						(tempEntry.getFamType() == FamilyType.LARGE && tempFamily.getNumFamilyMembers() >= 5))
 					{
-
+                        //TODO print out csv after this while loop and after
+						// sorting sponsors by id
 						System.out.println("found a match!");
 						matchWriter.writeToFile("\n" + tempEntry + "," + 
 								tempFamily.toString());

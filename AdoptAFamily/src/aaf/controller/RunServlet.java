@@ -41,6 +41,12 @@ public class RunServlet extends HttpServlet {
     public RunServlet() {
         super();
     }
+    
+    public static void main(String[] args) throws ServletException, IOException
+    {
+    	System.out.println("test");
+    	
+    }
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -71,22 +77,11 @@ public class RunServlet extends HttpServlet {
 		
 		HashMap<Family, FamilyType> adoptedFamilies;
 
-//		while (!sponsors.isEmpty())
-//		{
-//			Sponsor deleteMe = sponsors.poll();
-//			System.out.println("not emailing " + deleteMe.getSponId());
-//			
-//			if (deleteMe.getSponId() == 244)
-//			{
-//				break;
-//			}
-//		}
-
 		// un-comment to prove that timout issue is fixed below
 		request.getSession().setMaxInactiveInterval(8*60*60); // 8 hour session timeout, cause it's sad when this times out
 		
 		for(Sponsor sponsor : sponsors){
-			System.out.println("Sending email to " + sponsor.getSponId());
+			System.out.println("Sending email to Spon ID " + sponsor.getSponId());
 			
 			adoptedFamilies = sponsor.getAdoptedFams();
 
@@ -207,16 +202,6 @@ public class RunServlet extends HttpServlet {
 		FileWriter unmatchedWriter = new FileWriter(storeDir + "/unmatchedPeople.doc");
 		FileWriter waitlistWriter = new FileWriter(storeDir + "/WaitlistEmails.doc");
 		
-//		while (!unmatchedFamilies.isEmpty())
-//		{
-//			Family fam = unmatchedFamilies.poll();
-//			System.out.println("not emailing " + fam.getId());
-//			if (fam.getId() == 294)
-//			{
-//				break;
-//			}
-//		}
-		
 		unmatchedWriter.writeToFile("\n===Unmatched Families===\n");
 		
 		for (Family fam : unmatchedFamilies)
@@ -225,7 +210,7 @@ public class RunServlet extends HttpServlet {
 			// from info in a csv instead of info stored in the session... have MatchingServlet
 			// write out the needed csv
 			
-			System.out.println("emailing " + fam.getId());
+			System.out.println("emailing waitlisted Family ID " + fam.getId());
 			String famWaitlistEmailText = (String) request.getSession().getAttribute("nominatorWaitListedEmailText");
 			
 			famWaitlistEmailText = EmailConverter.convertNominatorEmailText(famWaitlistEmailText, fam);

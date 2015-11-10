@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import aaf.model.SponsorEntry.FamilyType;
 
 @Entity
-public class Sponsor extends Person implements Serializable{
+public class Sponsor extends Person implements Serializable, Comparable<Sponsor>{
 
 	/**
 	 * 
@@ -78,6 +78,21 @@ public class Sponsor extends Person implements Serializable{
 			   this.getNumMediumFams() + "," +
 	           this.getNumLargeFams();
 			
+	}
+
+	@Override
+	public int compareTo(Sponsor other) {
+		
+		if (this.sponId < other.sponId)
+		{
+			return -1;
+		}
+		else if (this.sponId > other.sponId)
+		{
+			return 1;
+		}
+		
+		return 0;
 	}
 
 }
