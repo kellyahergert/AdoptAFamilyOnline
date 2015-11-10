@@ -3,6 +3,7 @@ package aaf.controller;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
+import java.util.Set;
 
 import aaf.model.Family;
 import aaf.model.Nominator;
@@ -55,7 +56,64 @@ public class EmailConverter {
 	
 	public static String convertSponsorEmailText(String text, Sponsor sponsor)
 	{
-		return text.replaceAll("\\[Person\\.FirstName\\]", sponsor.getFirstName());
+		String familyList = "";
+		String yORies = "";
+		String sORnothing = "";
+		String hasORhave = "";
+		String one_ofORnothing = "";
+		Set<Family> adoptedFamilies = sponsor.getAdoptedFams().keySet();
+		// Determine if words are singular or plural
+		if (adoptedFamilies.size() > 1)
+		{
+			yORies = "ies";
+			sORnothing = "s";
+			hasORhave = "have";
+			one_ofORnothing = "";
+		}
+		else
+		{
+			yORies = "y";
+			sORnothing = "";
+			hasORhave = "has";
+			one_ofORnothing = "one of";
+		}
+		// Determine family list
+		int familyNum = 0;
+		for (Family family : adoptedFamilies)
+		{
+			familyNum += 1;
+			// First family:
+			if (familyNum == 1)
+			{
+				familyList += family.getFamilyName();
+				continue;
+			}
+			// 2nd of only 2 families:
+			if (familyNum == 2 && adoptedFamilies.size() == 2) // 2nd of 2 families
+			{
+				familyList += " and ";
+				familyList += family.getFamilyName();
+				continue;
+			}
+			// all other cases:
+			if (familyNum < adoptedFamilies.size()) // not last family
+			{
+				familyList += ", ";
+			}
+			else // last of >2 families
+			{
+				familyList += ", and ";
+			}
+			familyList += family.getFamilyName();
+		}
+		// Finally, convert the email text
+		String convertedSponText = text.replaceAll("\\[Person\\.FirstName\\]", sponsor.getFirstName());
+		convertedSponText = convertedSponText.replaceAll("\\[FamilyList\\]", familyList);
+		convertedSponText = convertedSponText.replaceAll("\\[yORies\\]", yORies);
+		convertedSponText = convertedSponText.replaceAll("\\[s\\?\\]", sORnothing);
+		convertedSponText = convertedSponText.replaceAll("\\[hasORhave\\]", hasORhave);
+		convertedSponText = convertedSponText.replaceAll("\\[one\\_ofORnothing\\]", one_ofORnothing);
+		return convertedSponText;
 	}
 	
 	public static String convertNominatorEmailText(String text, Family family)

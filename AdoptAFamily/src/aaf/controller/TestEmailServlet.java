@@ -12,6 +12,7 @@ import aaf.model.EmailServerCredentials;
 import aaf.model.Family;
 import aaf.model.Nominator;
 import aaf.model.Sponsor;
+import aaf.model.SponsorEntry.FamilyType;
 
 /**
  * Servlet implementation class TestEmailServlet
@@ -38,6 +39,9 @@ public class TestEmailServlet extends HttpServlet {
 		{
 			String sponsorEmailText = (String) request.getSession().getAttribute("sponsorEmailText");
 			Sponsor sponsor = new Sponsor(1, "John", "Johnson", request.getParameter("testEmail"), 1, 2, 3);
+			Family family = new Family(1, null, "Jackson", "Alan", "JJackson",
+					"family@fam.com", 5, "test");
+			sponsor.addAdoptedFam(FamilyType.MEDIUM, family);
 			sponsorEmailText = EmailConverter.convertSponsorEmailText(sponsorEmailText, sponsor);
 
 			emailSender.sendEmail("Adopt A Family Information", sponsorEmailText, sponsor.getEmailAddress()); 
