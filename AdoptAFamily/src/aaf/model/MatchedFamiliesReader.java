@@ -29,44 +29,54 @@ public class MatchedFamiliesReader {
 	public HashMap<Integer, LinkedList<Integer>> parseMatchedFamilies()
 	{
 		Scanner in = new Scanner(this.inputStream);
-		String firstLine = in.nextLine();
-		
-		int sponsorIdIndex = 0;
-		int familyIdIndex = 0;
-		int currIndex = 0;
-		
-		// loop through each column header to determine indices for IDs
-		for (String columnHeader : firstLine.split(","))
+		HashMap<Integer, LinkedList<Integer>> matches = new HashMap<Integer, LinkedList<Integer>>();
+		try
 		{
-			if (columnHeader.equalsIgnoreCase("Sponsor ID"))
+			String firstLine = in.nextLine();
+			
+			int sponsorIdIndex = -1;
+			int familyIdIndex = -1;
+			int currIndex = 0;
+			
+			// loop through each column header to determine indices for IDs
+			for (String columnHeader : firstLine.split(","))
 			{
-				sponsorIdIndex = currIndex;
+				if (columnHeader.equalsIgnoreCase("Sponsor ID"))
+				{
+					sponsorIdIndex = currIndex;
+				}
+				else if(columnHeader.equalsIgnoreCase("Family ID"))
+				{
+					familyIdIndex = currIndex;
+				}
+				++currIndex;
 			}
-			else if(columnHeader.equalsIgnoreCase("Family ID"))
+			if (sponsorIdIndex == -1)
 			{
-				familyIdIndex = currIndex;
+				throw new RuntimeException("Could not find \"Sponsor ID\" in matched families csv");
+			}
+			if (familyIdIndex == -1)
+			{
+				throw new RuntimeException("Could not find \"Family ID\" in matched families csv");
 			}
 			
-			++currIndex;
-		}
-		
-		HashMap<Integer, LinkedList<Integer>> matches =
-				new HashMap<Integer, LinkedList<Integer>>();
-		
-		while (in.hasNext())
-		{
-			String[] split = in.nextLine().split(",");
-			Integer sponsorId = Integer.parseInt(split[sponsorIdIndex]);
-			Integer familyId = Integer.parseInt(split[familyIdIndex]);
-			if (!matches.containsKey(sponsorId))
+			while (in.hasNext())
 			{
-				matches.put(sponsorId, new LinkedList<Integer>());
+				String[] split = in.nextLine().split(",");
+				Integer sponsorId = Integer.parseInt(split[sponsorIdIndex]);
+				Integer familyId = Integer.parseInt(split[familyIdIndex]);
+				if (!matches.containsKey(sponsorId))
+				{
+					matches.put(sponsorId, new LinkedList<Integer>());
+				}
+				
+				matches.get(sponsorId).add(familyId);
 			}
-			
-			matches.get(sponsorId).add(familyId);
-
 		}
-		
+		finally
+		{
+			in.close();
+		}
 		return matches;
 	}
 	
