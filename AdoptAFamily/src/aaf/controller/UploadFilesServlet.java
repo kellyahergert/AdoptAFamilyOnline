@@ -6,8 +6,11 @@ import java.nio.file.Files;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Scanner;
 
 import javax.servlet.ServletException;
@@ -21,8 +24,10 @@ import javax.servlet.http.Part;
 import aaf.model.EmailServerCredentials;
 import aaf.model.Family;
 import aaf.model.FamilyReader;
+import aaf.model.MatchedFamiliesReader;
 import aaf.model.Sponsor;
 import aaf.model.SponsorEntry;
+import aaf.model.SponsorEntry.FamilyType;
 import aaf.model.SponsorReader;
 import aaf.model.StorageManager;
 
@@ -47,23 +52,15 @@ public class UploadFilesServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		EmailServerCredentials creds = (EmailServerCredentials) request.getSession().getAttribute(SessionAttributeConstants.SERVER_CREDS_KEY);
-		System.out.println("file upload servlet " + creds);
-		
-		
-		Enumeration<String> params = request.getParameterNames();
-		
-		while (params.hasMoreElements())
-		{
-			String param = params.nextElement();
-			
-			System.out.println(param + " : " + request.getParameter(param));
-		}
+		System.out.println("Email Server Credentials: " + creds);
 		
 		String storeDir = (String) request.getSession().getAttribute("storeDir");
 		
-		if (request.getParameter("goToAaf3") != null)
+		// get uploaded files that are common to these two buttons
+		if (request.getParameter("goToAaf3") != null ||
+			request.getParameter("goToAaf4UsingDb") != null)
 		{
-		
+			
 		    Part filePart;
 		    
 		    // sponsor email text
@@ -78,8 +75,6 @@ public class UploadFilesServlet extends HttpServlet {
 		    }
 		    
 		    sponsorEmail.close();
-		    
-		    System.out.println("spons email text " + sponsorEmailText);
 		    
 		    request.getSession().setAttribute("sponsorEmailText", sponsorEmailText);
 		    
@@ -97,8 +92,6 @@ public class UploadFilesServlet extends HttpServlet {
 		    
 		    nominatorWaitListEmail.close();
 		    
-		    System.out.println("nom waitlisted email text " + nominatorWaitListEmailText);
-	
 		    request.getSession().setAttribute("nominatorWaitListedEmailText", nominatorWaitListEmailText);
 		    
 		    
@@ -115,12 +108,36 @@ public class UploadFilesServlet extends HttpServlet {
 		    
 		    nominatorEmail.close();
 		    
-		    System.out.println("nom email text " + nominatorEmailText);
-	
 		    request.getSession().setAttribute("nominatorEmailText", nominatorEmailText);
 		    
+			// FAQ PDF
+		    filePart = request.getPart("faqPdf");
+		    
+		    File storeFile = new File(storeDir + "/FAQ.pdf");
+		    
+		    Files.copy(filePart.getInputStream(), storeFile.toPath());
+	
+		    request.getSession().setAttribute("faqLoc", storeFile.toPath().toString());
+		    
+			
+		    // Sponsor Obligation PDF
+		    filePart = request.getPart("sponsorObligationsPdf");
+		    
+		    File sponObligationStoreFile = new File(storeDir + "/Sponsor_Obligations.pdf");
+		    
+		    Files.copy(filePart.getInputStream(), sponObligationStoreFile.toPath());
+	
+		    request.getSession().setAttribute("sponObligationLoc", sponObligationStoreFile.toPath().toString());
+		}
+		
+		/**
+		 * Upload family/sponsor csvs, email text files, faq and sponsor 
+		 * obligation PDFs
+		 */
+		if (request.getParameter("goToAaf3") != null)
+		{
 		    // sponsor csv
-		    filePart = request.getPart("sponsorCSV");
+		    Part filePart = request.getPart("sponsorCSV");
 	//	    String sponsorFileName = getFilename(filePart);
 		    
 		    SponsorReader sponsorReader = new SponsorReader(filePart.getInputStream());
@@ -141,47 +158,30 @@ public class UploadFilesServlet extends HttpServlet {
 	
 		    request.getSession().setAttribute("families", families);
 		    
-		    
-		    // FAQ PDF
-		    filePart = request.getPart("faqPdf");
-		    
-		    File storeFile = new File(storeDir + "/FAQ.pdf");
-		    
-		    Files.copy(filePart.getInputStream(), storeFile.toPath());
-	
-		    request.getSession().setAttribute("faqLoc", storeFile.toPath().toString());
-		    
-			
-		    // Sponsor Obligation PDF
-		    filePart = request.getPart("sponsorObligationsPdf");
-		    
-		    File sponObligationStoreFile = new File(storeDir + "/Sponsor_Obligations.pdf");
-		    
-		    Files.copy(filePart.getInputStream(), sponObligationStoreFile.toPath());
-	
-		    request.getSession().setAttribute("sponObligationLoc", sponObligationStoreFile.toPath().toString());
-		   
-		    
 		    StorageManager storageMgr = new StorageManager();
 		    
 		    String clearDatabase = request.getParameter("clearDatabase");
 		    if (clearDatabase != null && clearDatabase.equals("on"))
 		    {
+		    	System.out.println("delete all data");
 		    	storageMgr.deleteAllData();
 		    }
 		    
 		    String loadDatabase = request.getParameter("loadDatabase");
 		    if (loadDatabase != null && loadDatabase.equals("on"))
 		    {
+		    	System.out.println("store data");
 		    	storageMgr.storeFamilies(families);
 		    	storageMgr.storeSponsors(sponsors);
 		    }
 		    
 		    // all files uploaded, go to next page
 			request.getRequestDispatcher("aaf3_family_matching.html").forward(request, response);
-			
-	    
 		}
+		
+		/**
+		 * Upload Family Wishlist PDFs
+		 */
 		else if (request.getParameter("goToAaf2_1") != null)
 		{
 		    // wishlist pdf
@@ -222,6 +222,53 @@ public class UploadFilesServlet extends HttpServlet {
 			request.getRequestDispatcher("aaf2.1_files2.html").forward(request, response);
 		}
 		
+		/*
+		 * Load families and sponsors from the database, read in matches
+		 * from the provided csv.  Send emails based on matches read in
+		 * 
+		 */
+		else if (request.getParameter("goToAaf4UsingDb") != null)
+		{
+	    	System.out.println("running from database and matched csv");
+	    	StorageManager storageMgr = new StorageManager();
+	    	Queue<Family> families = storageMgr.retrieveFamilies();
+	    	List<Sponsor> sponsors = storageMgr.retrieveSponsors();
+	    	
+		    Part filePart = request.getPart("matchedFamilyCsv");
+		    
+	    	MatchedFamiliesReader matchReader = new MatchedFamiliesReader(filePart.getInputStream());
+
+			HashMap<Integer, LinkedList<Integer>> matchedIDs = matchReader.parseMatchedFamilies();
+			
+			HashMap<Integer, Family> familyMap = new HashMap<Integer, Family>();
+			for (Family fam : families)
+			{
+				familyMap.put(fam.getId(), fam);
+			}
+			
+			HashMap<Integer, Sponsor> sponsorMap = new HashMap<Integer, Sponsor>();
+			for (Sponsor spon : sponsors)
+			{
+				sponsorMap.put(spon.getSponId(), spon);
+			}
+			
+			for (Integer sponId : matchedIDs.keySet())
+			{
+				Sponsor curSpon = sponsorMap.get(sponId);
+				for (Integer famId : matchedIDs.get(sponId))
+				{
+					Family matchedFam = familyMap.get(famId);
+					
+					curSpon.addAdoptedFam(matchedFam);
+				}
+			}
+			
+			// set session attributes for RunServlet to use
+			request.getSession().setAttribute("sponsors", sponsors);
+			request.getSession().setAttribute("families", families);
+			
+			request.getRequestDispatcher("aaf4_run.jsp").forward(request, response);
+		}
 	}
 	
 	private static String getFilename(Part part) {

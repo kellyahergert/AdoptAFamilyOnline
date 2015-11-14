@@ -107,7 +107,7 @@ public class MatchingServlet extends HttpServlet {
 						matchWriter.writeToFile("\n" + tempEntry + "," + 
 								tempFamily.toString());
 						
-						tempEntry.getSponsor().addAdoptedFam(tempEntry.getFamType(), tempFamily);
+						tempEntry.getSponsor().addAdoptedFam(tempFamily);
 						sponsorEntries.poll();
 //						break;
 					}

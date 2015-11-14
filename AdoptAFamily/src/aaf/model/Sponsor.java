@@ -1,11 +1,10 @@
 package aaf.model;
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-
-import aaf.model.SponsorEntry.FamilyType;
 
 @Entity
 public class Sponsor extends Person implements Serializable, Comparable<Sponsor>{
@@ -20,7 +19,7 @@ public class Sponsor extends Person implements Serializable, Comparable<Sponsor>
 	int numLargeFams;
 	int numMediumFams;
 	int numSmallFams;
-	HashMap<Family,FamilyType> adoptedFams = new HashMap<Family,FamilyType>();
+	List<Family> adoptedFams = new LinkedList<Family>();
 
 	public Sponsor(int sponId, String firstName, String lastName, String emailAddress,
 			int numLargeFams, int numMediumFams,
@@ -44,8 +43,8 @@ public class Sponsor extends Person implements Serializable, Comparable<Sponsor>
 		this.numSmallFams = 0;	
 	}
 
-	public void addAdoptedFam(FamilyType famType, Family adoptedFamily) {
-		adoptedFams.put(adoptedFamily,famType);
+	public void addAdoptedFam(Family adoptedFamily) {
+		adoptedFams.add(adoptedFamily);
 	}
 	
 	public int getSponId()
@@ -65,7 +64,7 @@ public class Sponsor extends Person implements Serializable, Comparable<Sponsor>
 		return numSmallFams;
 	}
 
-	public HashMap<Family, FamilyType> getAdoptedFams() {
+	public List<Family> getAdoptedFams() {
 		return adoptedFams;
 	}
 

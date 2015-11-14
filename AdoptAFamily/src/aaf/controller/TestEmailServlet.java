@@ -41,7 +41,7 @@ public class TestEmailServlet extends HttpServlet {
 			Sponsor sponsor = new Sponsor(1, "John", "Johnson", request.getParameter("testEmail"), 1, 2, 3);
 			Family family = new Family(1, null, "Jackson", "Alan", "JJackson",
 					"family@fam.com", 5, "test");
-			sponsor.addAdoptedFam(FamilyType.MEDIUM, family);
+			sponsor.addAdoptedFam(family);
 			sponsorEmailText = EmailConverter.convertSponsorEmailText(sponsorEmailText, sponsor);
 
 			emailSender.sendEmail("Adopt A Family Information", sponsorEmailText, sponsor.getEmailAddress()); 

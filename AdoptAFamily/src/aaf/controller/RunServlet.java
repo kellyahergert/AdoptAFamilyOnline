@@ -1,10 +1,15 @@
 package aaf.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -20,10 +25,12 @@ import javax.servlet.http.HttpServletResponse;
 import aaf.model.EmailServerCredentials;
 import aaf.model.Family;
 import aaf.model.FileWriter;
+import aaf.model.MatchedFamiliesReader;
 import aaf.model.Person;
 import aaf.model.Sponsor;
 import aaf.model.SponsorEntry;
 import aaf.model.SponsorEntry.FamilyType;
+import aaf.model.StorageManager;
 
 /**
  * Servlet implementation class RunServlet
@@ -40,12 +47,6 @@ public class RunServlet extends HttpServlet {
      */
     public RunServlet() {
         super();
-    }
-    
-    public static void main(String[] args) throws ServletException, IOException
-    {
-    	System.out.println("test");
-    	
     }
 
 	/**
@@ -75,13 +76,13 @@ public class RunServlet extends HttpServlet {
 
 		FileWriter sponsorWriter = new FileWriter(storeDir + "/SponsorEmails.doc");
 		
-		HashMap<Family, FamilyType> adoptedFamilies;
+		List<Family> adoptedFamilies;
 
 		// un-comment to prove that timout issue is fixed below
 		request.getSession().setMaxInactiveInterval(8*60*60); // 8 hour session timeout, cause it's sad when this times out
 		
 		for(Sponsor sponsor : sponsors){
-			System.out.println("Sending email to Spon ID " + sponsor.getSponId());
+			System.out.println("Sending email to Spon ID " + sponsor.getSponId() + " at " + sponsor.getEmailAddress());
 			
 			adoptedFamilies = sponsor.getAdoptedFams();
 
@@ -108,7 +109,7 @@ public class RunServlet extends HttpServlet {
 			    attachments.add(sponObligationsBodyPart);
 			    
 			    // family wishlist attachments
-				for (Family family : adoptedFamilies.keySet()){
+				for (Family family : adoptedFamilies){
 				    MimeBodyPart famBodyPart = new MimeBodyPart();
 				    DataSource famSource = new FileDataSource(family.getAttachmentName());
 				    famBodyPart.setDataHandler(new DataHandler(famSource));
@@ -151,7 +152,7 @@ public class RunServlet extends HttpServlet {
 			
 			// let nominator of each adopted family know their family was adopted
 			FileWriter nominatorWriter = new FileWriter(storeDir + "/NominatorEmails.doc");
-			for (Family family : adoptedFamilies.keySet()){
+			for (Family family : adoptedFamilies){
 				Person nominator = family.getNominator();
 				
 				String nominatorEmailText = (String) request.getSession().getAttribute("nominatorEmailText");
@@ -196,66 +197,78 @@ public class RunServlet extends HttpServlet {
 				(PriorityQueue<SponsorEntry>) request.getSession().getAttribute("unmatchedSponsors");
 		
 
-		
-		// write lists of unmatched peeps to a file
-		
-		FileWriter unmatchedWriter = new FileWriter(storeDir + "/unmatchedPeople.doc");
-		FileWriter waitlistWriter = new FileWriter(storeDir + "/WaitlistEmails.doc");
-		
-		unmatchedWriter.writeToFile("\n===Unmatched Families===\n");
-		
-		for (Family fam : unmatchedFamilies)
+		if (unmatchedFamilies != null || 
+			(sponsorEntries != null && !sponsorEntries.isEmpty()))
 		{
-			//TODO take code from SendEmailFromCSV (and delete that class) to send these emails
-			// from info in a csv instead of info stored in the session... have MatchingServlet
-			// write out the needed csv
 			
-			System.out.println("emailing waitlisted Family ID " + fam.getId());
-			String famWaitlistEmailText = (String) request.getSession().getAttribute("nominatorWaitListedEmailText");
+			FileWriter unmatchedWriter = new FileWriter(storeDir + "/unmatchedPeople.doc");
 			
-			famWaitlistEmailText = EmailConverter.convertNominatorEmailText(famWaitlistEmailText, fam);
-			
-			waitlistWriter.writeToFile("\n\nTO:" + fam.getNominator().getEmailAddress() + "\n" + famWaitlistEmailText + "\n========================================\n");
-
-			unmatchedWriter.writeToFile("\n" + fam.toString());
-			
-			if (actuallySendEmails)
+			if (unmatchedFamilies != null)
 			{
-				String unmatchedFamSuccess = emailSender.sendEmail("Adopt A Family WaitList", famWaitlistEmailText, fam.getNominator().getEmailAddress());
+				// write lists of unmatched peeps to a file
 				
-				totalSuccess += "\n" + fam.getNominator().getEmailAddress() + " : " + unmatchedFamSuccess;
+				FileWriter waitlistWriter = new FileWriter(storeDir + "/WaitlistEmails.doc");
 				
-				request.getSession().setAttribute("statusMsg", totalSuccess);
+				unmatchedWriter.writeToFile("\n===Unmatched Families===\n");
 				
-				try {
-					Thread.sleep(1500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}	
-			}
-//			// un-comment this code block for testing
-//			else if (sleepTimeWithoutEmails > 0)
-//			{
-//				System.out.println("Waiting " + sleepTimeWithoutEmails/1000 + " seconds instead of sending waitlist email to nominator of family " + fam.getId());
-//				try {
-//					Thread.sleep(sleepTimeWithoutEmails);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-//			}
+				for (Family fam : unmatchedFamilies)
+				{
+					//TODO take code from SendEmailFromCSV (and delete that class) to send these emails
+					// from info in a csv instead of info stored in the session... have MatchingServlet
+					// write out the needed csv
+					
+					System.out.println("emailing waitlisted Family ID " + fam.getId());
+					String famWaitlistEmailText = (String) request.getSession().getAttribute("nominatorWaitListedEmailText");
+					
+					famWaitlistEmailText = EmailConverter.convertNominatorEmailText(famWaitlistEmailText, fam);
+					
+					waitlistWriter.writeToFile("\n\nTO:" + fam.getNominator().getEmailAddress() + "\n" + famWaitlistEmailText + "\n========================================\n");
 
-		}
+					unmatchedWriter.writeToFile("\n" + fam.toString());
+					
+					if (actuallySendEmails)
+					{
+						String unmatchedFamSuccess = emailSender.sendEmail("Adopt A Family WaitList", famWaitlistEmailText, fam.getNominator().getEmailAddress());
+						
+						totalSuccess += "\n" + fam.getNominator().getEmailAddress() + " : " + unmatchedFamSuccess;
+						
+						request.getSession().setAttribute("statusMsg", totalSuccess);
+						
+						try {
+							Thread.sleep(1500);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}	
+					}
+		//			// un-comment this code block for testing
+		//			else if (sleepTimeWithoutEmails > 0)
+		//			{
+		//				System.out.println("Waiting " + sleepTimeWithoutEmails/1000 + " seconds instead of sending waitlist email to nominator of family " + fam.getId());
+		//				try {
+		//					Thread.sleep(sleepTimeWithoutEmails);
+		//				} catch (InterruptedException e) {
+		//					e.printStackTrace();
+		//				}
+		//			}
+
+				}
+				
+				waitlistWriter.close();
+			}
 		
-		waitlistWriter.close();
-		
-		unmatchedWriter.writeToFile("\n===Unmatched Sponsor Entries===\n");
-		
-		for (SponsorEntry spon : sponsorEntries)
-		{
-			unmatchedWriter.writeToFile("\n" + spon.toString());
-		}
-		
-		unmatchedWriter.close();
+			if (!sponsorEntries.isEmpty())
+			{
+				unmatchedWriter.writeToFile("\n===Unmatched Sponsor Entries===\n");
+				
+				for (SponsorEntry spon : sponsorEntries)
+				{
+					unmatchedWriter.writeToFile("\n" + spon.toString());
+				}
+				
+			}
+
+			unmatchedWriter.close();
+	    }
 		
 		System.out.println("Done!");
 	}

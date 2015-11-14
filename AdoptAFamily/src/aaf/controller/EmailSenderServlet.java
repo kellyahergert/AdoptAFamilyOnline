@@ -55,6 +55,7 @@ public class EmailSenderServlet extends HttpServlet {
 		storeDir.mkdirs();
 		
 		request.getSession().setAttribute("storeDir", storeDir.toPath().toString());
+		request.getSession().setAttribute(SessionAttributeConstants.SERVER_CREDS_KEY, creds);
 
 		if (request.getParameter("sendTestSponsorEmail") != null)
 		{
@@ -73,7 +74,6 @@ public class EmailSenderServlet extends HttpServlet {
 		else if (request.getParameter("goToAaf2") != null)
 		{
 			
-			request.getSession().setAttribute(SessionAttributeConstants.SERVER_CREDS_KEY, creds);
 			request.getRequestDispatcher("aaf2_files.html").forward(request, response);
 			
 
@@ -132,6 +132,10 @@ public class EmailSenderServlet extends HttpServlet {
 	        */
 			
 
+		}
+		else if (request.getParameter("goToAafDbFiles") != null)
+		{
+			request.getRequestDispatcher("aaf2.1_db_files.html").forward(request, response);
 		}
 		else
 		{

@@ -41,11 +41,18 @@ public class StorageManager {
 		
 		StorageManager storageMgr = new StorageManager();
 		
-		storageMgr.storeFamilies(families);
-		storageMgr.storeSponsors(sponsors);
-		storageMgr.retrieveFamilies();
+//		storageMgr.storeFamilies(families);
+//		storageMgr.storeSponsors(sponsors);
+		Queue<Family> retrievedFams = storageMgr.retrieveFamilies();
 		storageMgr.retrieveSponsors();
-		storageMgr.deleteAllData();
+		
+		for (Family fam : retrievedFams)
+		{
+			System.out.println("fam " + fam);
+		}
+		
+		
+//		storageMgr.deleteAllData();
 	}
 	
 	public EntityManager getConnection()
@@ -106,12 +113,15 @@ public class StorageManager {
         List<Family> familyList = em.createQuery(
                 "SELECT fam FROM Family fam", Family.class).getResultList();
         
-        for (Family family : familyList)
-        {
-        	System.out.println("retrieved fam: " + family);
-        }
+
+//        for (Family family : familyList)
+//        {
+//        	System.out.println("retrieved fam: " + family);
+//        }
         
         families.addAll(familyList);
+
+		em.close();
 
 		return families;
 	}
@@ -127,12 +137,17 @@ public class StorageManager {
         List<Sponsor> sponsorList = em.createQuery(
                 "SELECT spon FROM Sponsor spon", Sponsor.class).getResultList();
         
-        for (Sponsor sponsor : sponsorList)
-        {
-        	System.out.println("retrieved spon: " + sponsor);
-        }
+        LinkedList<Sponsor> sponsors = new LinkedList<Sponsor>();
+        sponsors.addAll(sponsorList);
         
-		return sponsorList;
+		em.close();
+        
+//        for (Sponsor sponsor : sponsorList)
+//        {
+//        	System.out.println("retrieved spon: " + sponsor);
+//        }
+        
+		return sponsors;
 	}
 	
 	/**

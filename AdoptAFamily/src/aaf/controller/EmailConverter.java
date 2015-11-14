@@ -2,8 +2,8 @@ package aaf.controller;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 
 import aaf.model.Family;
 import aaf.model.Nominator;
@@ -11,6 +11,12 @@ import aaf.model.Sponsor;
 
 public class EmailConverter {
 
+	/**
+	 * main method is for testing purposes only
+	 * 
+	 * @param args
+	 * @throws FileNotFoundException
+	 */
 	public static void main(String[] args) throws FileNotFoundException 
 	{
 		Sponsor sponsor = new Sponsor(1, "Chase", "Johnson", "test@test.com", 1, 2, 3);
@@ -46,12 +52,6 @@ public class EmailConverter {
 		
 		String convertedText2 = EmailConverter.convertNominatorEmailText(text2, family);
 		System.out.println(convertedText2);
-//		DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
-//		Date date = new Date();
-//		System.out.println(dateFormat.format(date));
-//		File storeDir = new File("C:/AAF/" + dateFormat.format(date) + "/");
-//		System.out.println(storeDir.mkdirs());
-		
 	}
 	
 	public static String convertSponsorEmailText(String text, Sponsor sponsor)
@@ -61,7 +61,7 @@ public class EmailConverter {
 		String sORnothing = "";
 		String hasORhave = "";
 		String one_ofORnothing = "";
-		Set<Family> adoptedFamilies = sponsor.getAdoptedFams().keySet();
+		List<Family> adoptedFamilies = sponsor.getAdoptedFams();
 		// Determine if words are singular or plural
 		if (adoptedFamilies.size() > 1)
 		{
