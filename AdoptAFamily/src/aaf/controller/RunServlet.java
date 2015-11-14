@@ -1,15 +1,10 @@
 package aaf.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Queue;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -25,12 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 import aaf.model.EmailServerCredentials;
 import aaf.model.Family;
 import aaf.model.FileWriter;
-import aaf.model.MatchedFamiliesReader;
 import aaf.model.Person;
 import aaf.model.Sponsor;
 import aaf.model.SponsorEntry;
-import aaf.model.SponsorEntry.FamilyType;
-import aaf.model.StorageManager;
 
 /**
  * Servlet implementation class RunServlet
@@ -119,7 +111,6 @@ public class RunServlet extends HttpServlet {
 				}
 			    
 			} catch (MessagingException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			sponsorWriter.writeToFile("\n\nTO:" + sponsor.getEmailAddress() + "\n" + sponsorEmailText + "\n========================================\n");
@@ -213,10 +204,6 @@ public class RunServlet extends HttpServlet {
 				
 				for (Family fam : unmatchedFamilies)
 				{
-					//TODO take code from SendEmailFromCSV (and delete that class) to send these emails
-					// from info in a csv instead of info stored in the session... have MatchingServlet
-					// write out the needed csv
-					
 					System.out.println("emailing waitlisted Family ID " + fam.getId());
 					String famWaitlistEmailText = (String) request.getSession().getAttribute("nominatorWaitListedEmailText");
 					

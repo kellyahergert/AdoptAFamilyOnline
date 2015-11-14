@@ -8,7 +8,6 @@ public class Nominator extends Person{
 
 	private static final long serialVersionUID = 1L;
 	
-	// TODO use family id?  have it passed in
 	@Id @GeneratedValue
 	private int NomId;
 	

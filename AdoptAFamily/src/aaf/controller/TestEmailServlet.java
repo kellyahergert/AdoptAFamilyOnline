@@ -12,7 +12,6 @@ import aaf.model.EmailServerCredentials;
 import aaf.model.Family;
 import aaf.model.Nominator;
 import aaf.model.Sponsor;
-import aaf.model.SponsorEntry.FamilyType;
 
 /**
  * Servlet implementation class TestEmailServlet

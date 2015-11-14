@@ -90,33 +90,28 @@ public class MatchingServlet extends HttpServlet {
 				tempFamily = familiesToAdopt.poll();
 				System.out.println("Family " + tempFamily.getNumFamilyMembers() + " looking for match");
 				
-				
-//				while (!sponsorEntries.isEmpty())
-//				{
-					tempEntry = sponsorEntries.peek();
+				tempEntry = sponsorEntries.peek();
 
-					System.out.println("  Try Sponsor " + tempEntry.getFamType());
-					if ((tempEntry.getFamType() == FamilyType.SMALL && tempFamily.getNumFamilyMembers() <= 3) ||
-						(tempEntry.getFamType() == FamilyType.MEDIUM && (tempFamily.getNumFamilyMembers() >= 4 &&
-								                                        tempFamily.getNumFamilyMembers() <= 7)) ||
-						(tempEntry.getFamType() == FamilyType.LARGE && tempFamily.getNumFamilyMembers() >= 5))
-					{
-                        //TODO print out csv after this while loop and after
-						// sorting sponsors by id
-						System.out.println("found a match!");
-						matchWriter.writeToFile("\n" + tempEntry + "," + 
-								tempFamily.toString());
-						
-						tempEntry.getSponsor().addAdoptedFam(tempFamily);
-						sponsorEntries.poll();
-//						break;
-					}
-					else
-					{
-						System.out.println("not adopted");
-						familiesNotAdopted.add(tempFamily);
-					}
-//				}
+				System.out.println("  Try Sponsor " + tempEntry.getFamType());
+				if ((tempEntry.getFamType() == FamilyType.SMALL && tempFamily.getNumFamilyMembers() <= 3) ||
+					(tempEntry.getFamType() == FamilyType.MEDIUM && (tempFamily.getNumFamilyMembers() >= 4 &&
+																	tempFamily.getNumFamilyMembers() <= 7)) ||
+					(tempEntry.getFamType() == FamilyType.LARGE && tempFamily.getNumFamilyMembers() >= 5))
+				{
+					//TODO print out csv after this while loop and after
+					// sorting sponsors by id
+					System.out.println("found a match!");
+					matchWriter.writeToFile("\n" + tempEntry + "," + 
+							tempFamily.toString());
+					
+					tempEntry.getSponsor().addAdoptedFam(tempFamily);
+					sponsorEntries.poll();
+				}
+				else
+				{
+					System.out.println("not adopted");
+					familiesNotAdopted.add(tempFamily);
+				}
 				
 			}
 			

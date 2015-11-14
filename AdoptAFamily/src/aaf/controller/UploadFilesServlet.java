@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +26,6 @@ import aaf.model.FamilyReader;
 import aaf.model.MatchedFamiliesReader;
 import aaf.model.Sponsor;
 import aaf.model.SponsorEntry;
-import aaf.model.SponsorEntry.FamilyType;
 import aaf.model.SponsorReader;
 import aaf.model.StorageManager;
 
