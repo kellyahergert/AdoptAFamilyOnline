@@ -76,16 +76,12 @@
     <br>
     <hr>
     
-    <h3  title="Only select this if you already ran through normally and saved data to the database">
+    <h3 title="Only select this if you already ran through normally and saved data to the database">
       Run with Last Uploaded Data
     </h3>
     <p title="Only select this if you already ran through normally and saved data to the database">
-      <label>
-        <span class=label_2>Matched Families .csv file: </span>
-        <span class=label_1><input type=file name="matchedFamilyCsv"></span>
-      </label>
+      <input type="submit" name="goToAafDbFiles" value="Skip to Upload Files">
     </p>
-    <p><input type="submit" name="goToAafDb" value="Skip to Email Sending"></p>
     
   </form>
 </section>

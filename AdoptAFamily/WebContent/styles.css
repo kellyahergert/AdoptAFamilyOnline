@@ -50,6 +50,20 @@ span.flowFuture {
   display: inline-block;
 }
 
+span.flowNa {
+  color: darkgray;
+  background-color: #FFF;
+  border: 2px solid #1791c4;
+  padding: 3px 5px;
+  border-radius: 7px;
+  margin: 2px 2px 2px 0px;
+  text-decoration: none;
+  font-size: 90%;
+  line-height: 1.4;
+  white-space: nowrap;
+  display: inline-block;
+}
+
 /* a {
     color: #1086A4;
     text-decoration: none;
