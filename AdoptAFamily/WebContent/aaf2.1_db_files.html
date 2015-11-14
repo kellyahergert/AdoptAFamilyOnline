@@ -27,9 +27,6 @@
   <form method="POST" action="UploadFilesServlet" enctype="multipart/form-data">
     <h2>Files:</h2>
 
-    <p><label><span class=label_4>Matched Families CSV: </span>
-      <input type=file name="matchedFamilyCsv" required></label>
-    </p>
     <p><label><span class=label_4>Text for Email to Sponsors: </span>
       <input type=file name="sponsorEmailTextFile" required></label>
     </p>
@@ -44,6 +41,12 @@
     </p>
     <p><label><span class=label_4>Sponsor Obligations pdf: </span>
       <input type=file name="sponsorObligationsPdf" required></label>
+    </p>
+    <p><label><span class=label_4>Matched Families CSV: </span>
+      <input type=file name="matchedFamilyCsv" required></label>
+    </p>
+    <p><label><span class=label_4>Waitlisted Families CSV: </span>
+      <input type=file name="waitlistedFamilyCsv"></label>
     </p>
     <p><input type="submit" name="goToAaf4UsingDb" value="Continue to Email Sending"></p><br>
   </form>
