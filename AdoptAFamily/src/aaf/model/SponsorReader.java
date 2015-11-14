@@ -38,7 +38,7 @@ public class SponsorReader {
 		try
 		{
 			String firstLine = in.nextLine();
-			// loop through each column header to determine indices for IDs
+			// loop through column headers to determine indices for each variable
 			int currIndex = 0;
 			for (String columnHeader : firstLine.split(","))
 			{
@@ -52,10 +52,19 @@ public class SponsorReader {
 				if (columnHeader.contains(numLargeFamsText.toLowerCase())) {numLargeFamsIndex = currIndex;}
 				++currIndex;
 			}
-			if (sponIdIndex < 0 || firstNameIndex < 0 || lastNameIndex < 0 || emailAddressIndex < 0
-			    || numSmallFamsIndex < 0 || numMediumFamsIndex < 0 || numLargeFamsIndex < 0)
+
+			String failedColumns = "";
+			if (sponIdIndex == -1) {failedColumns += ("\n" + sponIdText);}
+			if (firstNameIndex == -1) {failedColumns += ("\n" + firstNameText);}
+			if (lastNameIndex == -1) {failedColumns += ("\n" + lastNameText);}
+			if (emailAddressIndex == -1) {failedColumns += ("\n" + emailAddressText);}
+			if (numSmallFamsIndex == -1) {failedColumns += ("\n" + numSmallFamsText);}
+			if (numMediumFamsIndex == -1) {failedColumns += ("\n" + numMediumFamsText);}
+			if (numLargeFamsIndex == -1) {failedColumns += ("\n" + numLargeFamsText);}
+
+			if (failedColumns != "")
 			{
-				throw new RuntimeException("Unable to identify columns in Sponsor csv");
+				throw new RuntimeException("Unable to find the following columns in Sponsor csv:" + failedColumns);
 			}
 
 			Sponsor tempSponsor;
