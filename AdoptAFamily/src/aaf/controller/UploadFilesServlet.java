@@ -229,23 +229,37 @@ public class UploadFilesServlet extends HttpServlet {
 		{
 	    	System.out.println("running from database and matched csv");
 	    	StorageManager storageMgr = new StorageManager();
-	    	Queue<Family> families = storageMgr.retrieveFamilies();
-	    	List<Sponsor> sponsors = storageMgr.retrieveSponsors();
+	    	Queue<Family> familiesFromDb = storageMgr.retrieveFamilies();
+	    	List<Sponsor> sponsorsFromDb = storageMgr.retrieveSponsors();
+	    	List<Sponsor> matchedSponsors = new LinkedList<Sponsor>();
 	    	
-		    Part filePart = request.getPart("matchedFamilyCsv");
+	    	Part filePart;
+	    	
+	    	// if user uploaded a waitlist csv, parse it and set session attribute
+	    	// so waitlist emails are sent
+	    	if (request.getPart("waitlistedFamilyCsv").getSize() > 0)
+	    	{
+	    		filePart = request.getPart("waitlistedFamilyCsv");
+				FamilyReader familyReader = new FamilyReader(filePart.getInputStream(), storeDir);
+				PriorityQueue<Family> unmatchedFamilies = familyReader.createFamilyObjects();
+
+				request.getSession().setAttribute("unmatchedFamilies", unmatchedFamilies);
+	    	}
+		    
+		    filePart = request.getPart("matchedFamilyCsv");
 		    
 	    	MatchedFamiliesReader matchReader = new MatchedFamiliesReader(filePart.getInputStream());
 
 			HashMap<Integer, LinkedList<Integer>> matchedIDs = matchReader.parseMatchedFamilies();
 			
 			HashMap<Integer, Family> familyMap = new HashMap<Integer, Family>();
-			for (Family fam : families)
+			for (Family fam : familiesFromDb)
 			{
 				familyMap.put(fam.getId(), fam);
 			}
 			
 			HashMap<Integer, Sponsor> sponsorMap = new HashMap<Integer, Sponsor>();
-			for (Sponsor spon : sponsors)
+			for (Sponsor spon : sponsorsFromDb)
 			{
 				sponsorMap.put(spon.getSponId(), spon);
 			}
@@ -259,11 +273,12 @@ public class UploadFilesServlet extends HttpServlet {
 					
 					curSpon.addAdoptedFam(matchedFam);
 				}
+				matchedSponsors.add(curSpon);
 			}
 			
 			// set session attributes for RunServlet to use
-			request.getSession().setAttribute("sponsors", sponsors);
-			request.getSession().setAttribute("families", families);
+			request.getSession().setAttribute("sponsors", matchedSponsors);
+			request.getSession().setAttribute("families", familiesFromDb);
 			
 			request.getRequestDispatcher("aaf4_run.jsp").forward(request, response);
 		}

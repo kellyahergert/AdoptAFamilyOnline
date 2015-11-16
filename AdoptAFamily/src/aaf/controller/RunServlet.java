@@ -243,7 +243,7 @@ public class RunServlet extends HttpServlet {
 				waitlistWriter.close();
 			}
 		
-			if (!sponsorEntries.isEmpty())
+			if (sponsorEntries != null && !sponsorEntries.isEmpty())
 			{
 				unmatchedWriter.writeToFile("\n===Unmatched Sponsor Entries===\n");
 				

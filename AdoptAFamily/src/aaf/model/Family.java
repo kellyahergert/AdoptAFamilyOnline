@@ -80,7 +80,7 @@ public class Family extends Person implements Comparable<Family>, Serializable {
 
 	public static String getHeader()
 	{
-		return "Family ID,Nominator First,Nominator Last,Nominator Email,Num in Family,Family Last,Family Email,Adult 1 First,Adult 1 Last";
+		return "Fam/Nom ID,Your Name (First),Your Name (Last),Your Work E-mail,Total in Family,Family's Last Name,Nominated Family's E-mail,Name of Adult #1 (First),Name of Adult #1 (Last)";
 	}
 
 	public String toString(){

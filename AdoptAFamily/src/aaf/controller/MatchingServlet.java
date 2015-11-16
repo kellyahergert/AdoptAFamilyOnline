@@ -79,11 +79,6 @@ public class MatchingServlet extends HttpServlet {
 
 			 PriorityQueue<Family> familiesNotAdopted = new PriorityQueue<Family>();
 
-			 
-			// go thru list of sponsors
-			 // poll a sponsor
-			   // poll from families until a family is a match
-			 
 			//let the matching begin!!!!
 			while (!familiesToAdopt.isEmpty())
 			{
@@ -122,12 +117,18 @@ public class MatchingServlet extends HttpServlet {
 			// save leftover families and sponsor entries for sending rejection emails
 			request.getSession().setAttribute("unmatchedFamilies", familiesNotAdopted);
 			request.getSession().setAttribute("unmatchedSponsors", sponsorEntries);
-			
-			for (Family thisFam : familiesNotAdopted)
+		
+			if (!familiesNotAdopted.isEmpty())
 			{
-				System.out.println(thisFam.getId() + " - " + thisFam.getFamilyName() + " family was not adopted :(");
+				FileWriter unmatchedWriter = new FileWriter(storeDir + "/unmatchedFamilies.csv");
+				unmatchedWriter.writeToFile(Family.getHeader());
+				for (Family thisFam : familiesNotAdopted)
+				{
+					System.out.println(thisFam.getId() + " - " + thisFam.getFamilyName() + " family was not adopted :(");
+					unmatchedWriter.writeToFile("\n" + thisFam.toString());
+				}
+				unmatchedWriter.close();
 			}
-			
 			for (SponsorEntry thisSpon : sponsorEntries)
 			{
 				System.out.println(thisSpon.getSponsor().getSponId() + " - " +  thisSpon.getSponsor().getLastName() + " family had no family to adopt :(");

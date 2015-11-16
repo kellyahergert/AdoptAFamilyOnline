@@ -106,22 +106,25 @@ public class StorageManager {
 	 */
 	public Queue<Family> retrieveFamilies()
 	{
+		Queue<Family> families = new PriorityQueue<Family>();
+
         EntityManager em = getConnection();
 
-		Queue<Family> families = new PriorityQueue<Family>();
-		
-        List<Family> familyList = em.createQuery(
+        try
+        {
+			List<Family> familyList = em.createQuery(
                 "SELECT fam FROM Family fam", Family.class).getResultList();
         
-
-//        for (Family family : familyList)
-//        {
-//        	System.out.println("retrieved fam: " + family);
-//        }
-        
-        families.addAll(familyList);
-
-		em.close();
+			families.addAll(familyList);
+        }
+        catch (Exception e)
+        {
+        	System.out.println("No family entries found in database: " + e.getMessage());
+        }
+        finally
+        {
+			em.close();
+        }
 
 		return families;
 	}
@@ -132,20 +135,25 @@ public class StorageManager {
 	 */
 	public List<Sponsor> retrieveSponsors()
 	{
+        LinkedList<Sponsor> sponsors = new LinkedList<Sponsor>();
+        
         EntityManager em = getConnection();
 
-        List<Sponsor> sponsorList = em.createQuery(
-                "SELECT spon FROM Sponsor spon", Sponsor.class).getResultList();
-        
-        LinkedList<Sponsor> sponsors = new LinkedList<Sponsor>();
-        sponsors.addAll(sponsorList);
-        
-		em.close();
-        
-//        for (Sponsor sponsor : sponsorList)
-//        {
-//        	System.out.println("retrieved spon: " + sponsor);
-//        }
+        try
+        {
+			List<Sponsor> sponsorList = em.createQuery(
+					"SELECT spon FROM Sponsor spon", Sponsor.class).getResultList();
+			
+			sponsors.addAll(sponsorList);
+        }
+        catch(Exception e)
+        {
+        	System.out.println("No sponsor entries found in database: " + e.getMessage());
+        }
+        finally
+        {
+        	em.close();
+        }
         
 		return sponsors;
 	}

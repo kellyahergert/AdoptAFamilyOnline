@@ -41,10 +41,22 @@ public class EmailSenderServlet extends HttpServlet {
 //			
 //			System.out.println(param + " : " + request.getParameter(param));
 //		}
+		
+		int smtpServerPort = 0;
+		try
+		{
+			smtpServerPort = Integer.parseInt(request.getParameter("smtpServerPort"));
+		}
+		catch (NumberFormatException e)
+		{
+			System.out.println("Must supply an integer for the Mail Server Port");
+			request.getRequestDispatcher("aaf1_email_info.jsp").forward(request, response);
+			return;
+		}
 
 		EmailServerCredentials creds = new EmailServerCredentials(
 				request.getParameter("smtpServerIP"),
-				Integer.parseInt(request.getParameter("smtpServerPort")), // TODO handle NumberFormatException?
+                smtpServerPort,
 				request.getParameter("smtpServerLogin"),
 				request.getParameter("smtpServerPassword"));
 		
