@@ -22,7 +22,7 @@ public class FamilyReader {
 	int lastNameIndex = -1;
 	int emailAddressIndex = -1;
 	int numFamMembersIndex = -1;
-	static final String idText = "Fam/Nom ID";
+	static final String idText = "ID";
 	static final String nomFirstNameText = "Your Name (First)";
 	static final String nomLastNameText = "Your Name (Last)";
 	static final String nomEmailAddressText = "Your Work E-mail";
