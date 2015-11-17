@@ -129,7 +129,7 @@ public class FamilyReader {
 						break;
 
 					}else if (i == 1){
-						System.out.println("could not find attachment for " +
+						System.out.println("Family " + id + " - could not find attachment for " +
 								familyName + " family");
 						System.out.println("----> " + attachmentNames[0]);
 						System.out.println("----> " + attachmentNames[1]);
