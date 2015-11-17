@@ -90,8 +90,8 @@ public class MatchingServlet extends HttpServlet {
 				System.out.println("  Try Sponsor " + tempEntry.getFamType());
 				if ((tempEntry.getFamType() == FamilyType.SMALL && tempFamily.getNumFamilyMembers() <= 3) ||
 					(tempEntry.getFamType() == FamilyType.MEDIUM && (tempFamily.getNumFamilyMembers() >= 4 &&
-																	tempFamily.getNumFamilyMembers() <= 7)) ||
-					(tempEntry.getFamType() == FamilyType.LARGE && tempFamily.getNumFamilyMembers() >= 5))
+																	tempFamily.getNumFamilyMembers() <= 6)) ||
+					(tempEntry.getFamType() == FamilyType.LARGE && tempFamily.getNumFamilyMembers() >= 7))
 				{
 					//TODO print out csv after this while loop and after
 					// sorting sponsors by id
@@ -122,6 +122,7 @@ public class MatchingServlet extends HttpServlet {
 			{
 				FileWriter unmatchedWriter = new FileWriter(storeDir + "/unmatchedFamilies.csv");
 				unmatchedWriter.writeToFile(Family.getHeader());
+				
 				for (Family thisFam : familiesNotAdopted)
 				{
 					System.out.println(thisFam.getId() + " - " + thisFam.getFamilyName() + " family was not adopted :(");
@@ -129,16 +130,23 @@ public class MatchingServlet extends HttpServlet {
 				}
 				unmatchedWriter.close();
 			}
-			for (SponsorEntry thisSpon : sponsorEntries)
-			{
-				System.out.println(thisSpon.getSponsor().getSponId() + " - " +  thisSpon.getSponsor().getLastName() + " family had no family to adopt :(");
+			if (!sponsorEntries.isEmpty())
+			{				
+				FileWriter unmatchedWriter = new FileWriter(storeDir + "/unmatchedSponsors.csv");
+				unmatchedWriter.writeToFile(SponsorEntry.getHeader());
+				
+				for (SponsorEntry thisSpon : sponsorEntries)
+				{
+					System.out.println(thisSpon.getSponsor().getSponId() + " - " +  thisSpon.getSponsor().getLastName() + " family had no family to adopt :(");
+					unmatchedWriter.writeToFile("\n" + thisSpon.toString());
+				}
+				
+				unmatchedWriter.close();
 			}
 	    	
 	    }
-
 	    
 		request.getRequestDispatcher("aaf4_run.jsp").forward(request, response);
-		
 	}
 
 }
