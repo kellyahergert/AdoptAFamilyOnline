@@ -70,8 +70,20 @@ public class RunServlet extends HttpServlet {
 		
 		List<Family> adoptedFamilies;
 
-		// un-comment to prove that timout issue is fixed below
 		request.getSession().setMaxInactiveInterval(8*60*60); // 8 hour session timeout, cause it's sad when this times out
+		
+		PriorityQueue<Family> unmatchedFamilies =
+				(PriorityQueue<Family>) request.getSession().getAttribute("unmatchedFamilies");
+
+		int totalNumSponsors = sponsors.size();
+		int totalWaitlistedFamilies = 0;
+		if (unmatchedFamilies != null)
+		{
+			totalWaitlistedFamilies = unmatchedFamilies.size();
+		}
+		int sponsorCounter = 0;
+		int waitlistCounter = 0;
+		String progressMessage = "";
 		
 		for(Sponsor sponsor : sponsors){
 			System.out.println("Sending email to Spon ID " + sponsor.getSponId() + " at " + sponsor.getEmailAddress());
@@ -177,13 +189,14 @@ public class RunServlet extends HttpServlet {
 				
 			}
 			nominatorWriter.close();
-			
+			++sponsorCounter;
+			progressMessage = ">>> Emails sent: [" + Integer.toString(sponsorCounter) + " of " + Integer.toString(totalNumSponsors) + " Sponsors]";
+			progressMessage += " and [" + Integer.toString(waitlistCounter) + " of " + Integer.toString(totalWaitlistedFamilies) + " wait listed families] <<<";
+			System.out.println(progressMessage);
 		}
 		
 		sponsorWriter.close();
 		
-		PriorityQueue<Family> unmatchedFamilies =
-				(PriorityQueue<Family>) request.getSession().getAttribute("unmatchedFamilies");
 		PriorityQueue<SponsorEntry> sponsorEntries =
 				(PriorityQueue<SponsorEntry>) request.getSession().getAttribute("unmatchedSponsors");
 		
@@ -237,7 +250,10 @@ public class RunServlet extends HttpServlet {
 		//					e.printStackTrace();
 		//				}
 		//			}
-
+					++waitlistCounter;
+					progressMessage = ">>> Emails sent: [" + Integer.toString(sponsorCounter) + " of " + Integer.toString(totalNumSponsors) + " Sponsors]";
+					progressMessage += " and [" + Integer.toString(waitlistCounter) + " of " + Integer.toString(totalWaitlistedFamilies) + " wait listed families] <<<";
+					System.out.println(progressMessage);
 				}
 				
 				waitlistWriter.close();
