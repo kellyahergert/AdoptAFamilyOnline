@@ -84,7 +84,7 @@ public class MatchingServlet extends HttpServlet {
 			{
 				tempFamily = familiesToAdopt.poll();
 				System.out.println("Family " + tempFamily.getNumFamilyMembers() + " looking for match");
-				
+				// TODO: if LARGE sponsor is too big for family, try MEDIUM, then SMALL
 				tempEntry = sponsorEntries.peek();
 
 				System.out.println("  Try Sponsor " + tempEntry.getFamType());
