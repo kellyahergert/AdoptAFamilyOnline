@@ -75,12 +75,18 @@ public class RunServlet extends HttpServlet {
 		PriorityQueue<Family> unmatchedFamilies =
 				(PriorityQueue<Family>) request.getSession().getAttribute("unmatchedFamilies");
 
-		int totalNumSponsors = sponsors.size();
+		int totalNumSponsors = 0;
+		if (sponsors != null)
+		{
+			totalNumSponsors = sponsors.size();
+		}
+		
 		int totalWaitlistedFamilies = 0;
 		if (unmatchedFamilies != null)
 		{
 			totalWaitlistedFamilies = unmatchedFamilies.size();
 		}
+		
 		int sponsorCounter = 0;
 		int waitlistCounter = 0;
 		String progressMessage = "";

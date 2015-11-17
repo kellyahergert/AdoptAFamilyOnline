@@ -106,6 +106,7 @@ public class FamilyReader {
 				String emailAddress = tokens[emailAddressIndex];
 				int numFamMembers = Integer.parseInt(tokens[numFamMembersIndex]);
 
+				String[] attachmentNames = new String[2];
 				String attachmentName = "";
 
 				for (int i=0; i < 2; i++){
@@ -119,21 +120,23 @@ public class FamilyReader {
 					}
 
 					noSpaceName = noSpaceName.replaceAll("\\s", "");
-					attachmentName = storeDir + "/" + numFamMembers + " " + noSpaceName + ".pdf";
+					attachmentNames[i] = storeDir + "/" + numFamMembers + " " + noSpaceName + ".pdf";
 
-					File testAttachment = new File(attachmentName);
+					File testAttachment = new File(attachmentNames[i]);
 					boolean attachmentExists = testAttachment.exists();
 
 					if (attachmentExists){
 						break;
 
 					}else if (i == 1){
-						System.out.println("could not find attachment " + attachmentName);
+						System.out.println("could not find attachment for " +
+								familyName + " family");
+						System.out.println("----> " + attachmentNames[0]);
+						System.out.println("----> " + attachmentNames[1]);
 
 						attachmentName = "NEED_ATTACHMENT_NAME";
 						count++;
 					}
-
 				}
 
 				Family tempFam = new Family(id, nominator, familyName, firstName, lastName,
