@@ -32,7 +32,8 @@
       <input type=text list=mailServerList name="smtpServerIP" maxlength="100" value="${smtpServerIP}" required>
       <datalist id=mailServerList>
         <option label="smtp.comcast.net" value="smtp.comcast.net">
-        <option label="10.10.16.226" value="10.10.16.226">
+        <option label="smtp.office365.com" value="smtp.office365.com">
+        <option label="Internal Relay" value="10.10.16.236">
       </datalist>
       </label>
     </p>
@@ -40,6 +41,7 @@
       <input type=text list=portList name="smtpServerPort" maxlength="5" value="${smtpServerPort}" required></label>
       <datalist id=portList>
         <option label="587" value="587">
+        <option label="25" value="25">
       </datalist>
     </p>
     <p><label><span class=label_1>Email Login: </span>
