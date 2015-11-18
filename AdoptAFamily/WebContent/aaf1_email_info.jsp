@@ -59,6 +59,7 @@
       <input type=email list=fromEmailList name="testEmailFromAddr" maxlength="100" value=""></label>
       <datalist id=fromEmailList>
         <option label="test@monkey.com" value="test@monkey.com">
+        <option label="jlittlejohn@denrescue.org" value="jlittlejohn@denrescue.org">
       </datalist>
     </p>
     <p>
