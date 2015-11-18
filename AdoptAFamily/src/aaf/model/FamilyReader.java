@@ -126,6 +126,7 @@ public class FamilyReader {
 					boolean attachmentExists = testAttachment.exists();
 
 					if (attachmentExists){
+						attachmentName = attachmentNames[i];
 						break;
 
 					}else if (i == 1){
