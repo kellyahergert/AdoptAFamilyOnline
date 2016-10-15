@@ -23,7 +23,7 @@ a.flowPrevious {
 
 span.flowCurrent {
   color: #FFF;
-  font-weight: 170%;
+  font-weight: bold;
   background-color: #1791c4;
   border: 2px solid #1791c4;
   padding: 3px 5px;
@@ -84,6 +84,18 @@ span.arrowFuture {
   display: inline-block;
 }
 
+td {
+  text-align: center;
+}
+
+input.num_input_label {
+  width: 40px;
+  display:block;
+  float:left;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
 span.label_1 {
   width: 185px;
   display:block;
@@ -117,11 +129,9 @@ input {
 }
 p {
   padding-top:5px;
-  clear: all;
 }
 h2 {
   padding-top:1px;
-  clear: all;
 }
 label {
   padding-right:20px;

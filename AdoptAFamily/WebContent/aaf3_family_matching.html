@@ -25,14 +25,30 @@
 <section>
   <h2>Family Matching</h2>
   <form method="POST" action="MatchingServlet">
-    <p><input type=submit name=createMatches value="Create Matches"></p> <!-- <br>
-    
- Commented out for now. Add this functionality some day.
-    <p><input type=submit name=previewMatches value="Preview Matches"></p><br>
-    <p><input type=submit name=editMatches value="Edit Matches"></p><br>
-    <p><input type=submit name=downloadMatches value="Download Matches"></p><br><br>
-    
-    <p><input type=submit name=goToAaf4 value="Continue to Preview and Run!"></p> -->
+    <p><table>
+      <tr>
+        <td></td>
+        <td></td>
+        <td>Small Family</td>
+        <td><=</td>
+        <td><input class="num_input_label" type=number name="smallFamMax" min=1 max=5 required value=3></td>
+      </tr>
+      <tr>
+        <td><input class="num_input_label" type=number name="mediumFamMin" min=2 max=9 required value=4></td>
+        <td><=</td>
+        <td>Medium Family</td>
+        <td><=</td>
+        <td><input class="num_input_label" type=number name="mediumFamMax" min=3 max=10 required value=6></td>
+      </tr>
+      <tr>
+        <td><input class="num_input_label" type=number name="largeFamMin" min=4 max=99 required value=7></td>
+        <td><=</td>
+        <td>Large Family</td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table></p>
+    <p><input type=submit name=createMatches value="Create Matches"></p>
   </form>
 </section>
 

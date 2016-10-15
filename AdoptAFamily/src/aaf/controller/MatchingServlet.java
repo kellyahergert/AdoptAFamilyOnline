@@ -57,6 +57,11 @@ public class MatchingServlet extends HttpServlet {
 	    
 	    if (request.getParameter("createMatches") != null)
 	    {
+	    	int smallFamMax = Integer.parseInt(request.getParameter("smallFamMax"));
+			int mediumFamMin = Integer.parseInt(request.getParameter("mediumFamMin"));
+			int mediumFamMax = Integer.parseInt(request.getParameter("mediumFamMax"));
+			int largeFamMin = Integer.parseInt(request.getParameter("largeFamMin"));
+
 			SponsorEntry tempEntry = null;
 			Family tempFamily = null;
 			
@@ -88,10 +93,10 @@ public class MatchingServlet extends HttpServlet {
 				tempEntry = sponsorEntries.peek();
 
 				System.out.println("  Try Sponsor " + tempEntry.getFamType());
-				if ((tempEntry.getFamType() == FamilyType.SMALL && tempFamily.getNumFamilyMembers() <= 3) ||
-					(tempEntry.getFamType() == FamilyType.MEDIUM && (tempFamily.getNumFamilyMembers() >= 4 &&
-																	tempFamily.getNumFamilyMembers() <= 6)) ||
-					(tempEntry.getFamType() == FamilyType.LARGE && tempFamily.getNumFamilyMembers() >= 7))
+				if ((tempEntry.getFamType() == FamilyType.SMALL && tempFamily.getNumFamilyMembers() <= smallFamMax) ||
+					(tempEntry.getFamType() == FamilyType.MEDIUM && (tempFamily.getNumFamilyMembers() >= mediumFamMin &&
+																	tempFamily.getNumFamilyMembers() <= mediumFamMax)) ||
+					(tempEntry.getFamType() == FamilyType.LARGE && tempFamily.getNumFamilyMembers() >= largeFamMin))
 				{
 					//TODO print out csv after this while loop and after
 					// sorting sponsors by id
