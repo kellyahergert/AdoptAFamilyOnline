@@ -88,19 +88,53 @@ public class MatchingServlet extends HttpServlet {
 			while (!familiesToAdopt.isEmpty())
 			{
 				tempFamily = familiesToAdopt.poll();
-				System.out.println("Family " + tempFamily.getNumFamilyMembers() + " looking for match");
-				// TODO: if LARGE sponsor is too big for family, try MEDIUM, then SMALL
-				tempEntry = sponsorEntries.peek();
 
-				System.out.println("  Try Sponsor " + tempEntry.getFamType());
-				if ((tempEntry.getFamType() == FamilyType.SMALL && tempFamily.getNumFamilyMembers() <= smallFamMax) ||
-					(tempEntry.getFamType() == FamilyType.MEDIUM && (tempFamily.getNumFamilyMembers() >= mediumFamMin &&
-																	tempFamily.getNumFamilyMembers() <= mediumFamMax)) ||
-					(tempEntry.getFamType() == FamilyType.LARGE && tempFamily.getNumFamilyMembers() >= largeFamMin))
+				boolean smallFam = tempFamily.getNumFamilyMembers() <= smallFamMax;
+				boolean mediumFam = (tempFamily.getNumFamilyMembers() >= mediumFamMin &&
+						             tempFamily.getNumFamilyMembers() <= mediumFamMax);
+				boolean largeFam = tempFamily.getNumFamilyMembers() >= largeFamMin;
+				
+				String famSizeString = largeFam ? "large" : (mediumFam ? "medium" : "small");
+				
+				System.out.println("Family " + tempFamily.getNumFamilyMembers() + 
+						           " (" + famSizeString + ") looking for match");
+				
+				tempEntry = sponsorEntries.peek();
+				
+				if (mediumFam)
+				{
+					// while sponsor is too big for family, poll sponsors
+					while (tempEntry.getFamType() == FamilyType.LARGE)
+					{
+						System.out.println("  Skipped " + tempEntry.getFamType() + " sponsor, ID = " + 
+					                       tempEntry.getSponsor().getSponId());
+						sponsorEntries.poll(); // remove the sponsor that was too big
+						tempEntry = sponsorEntries.peek();
+					}
+				}
+				else if (smallFam)
+				{
+					// while sponsor is too big for family, poll sponsors
+					while (tempEntry.getFamType() == FamilyType.LARGE || 
+						   tempEntry.getFamType() == FamilyType.MEDIUM)
+					{
+						System.out.println("  Skipped " + tempEntry.getFamType() + " sponsor, ID = " + 
+			                       tempEntry.getSponsor().getSponId());
+						sponsorEntries.poll(); // remove the sponsor that was too big
+						tempEntry = sponsorEntries.peek();
+					}
+					
+				}
+
+				System.out.println("  Try Sponsor " + tempEntry.getFamType() +
+						           ", ID = " + tempEntry.getSponsor().getSponId());
+				if ((tempEntry.getFamType() == FamilyType.SMALL && smallFam) ||
+					(tempEntry.getFamType() == FamilyType.MEDIUM && mediumFam) ||
+					(tempEntry.getFamType() == FamilyType.LARGE && largeFam))
 				{
 					//TODO print out csv after this while loop and after
 					// sorting sponsors by id
-					System.out.println("found a match!");
+					System.out.println("  found a match!");
 					matchWriter.writeToFile("\n" + tempEntry + "," + 
 							tempFamily.toString());
 					
@@ -109,7 +143,7 @@ public class MatchingServlet extends HttpServlet {
 				}
 				else
 				{
-					System.out.println("not adopted");
+					System.out.println("  not adopted");
 					familiesNotAdopted.add(tempFamily);
 				}
 				

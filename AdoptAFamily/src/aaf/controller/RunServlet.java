@@ -92,113 +92,119 @@ public class RunServlet extends HttpServlet {
 		String progressMessage = "";
 		
 		for(Sponsor sponsor : sponsors){
-			System.out.println("Sending email to Spon ID " + sponsor.getSponId() + " at " + sponsor.getEmailAddress());
-			
+			++sponsorCounter;
 			adoptedFamilies = sponsor.getAdoptedFams();
-
-			String sponsorEmailText = (String) request.getSession().getAttribute("sponsorEmailText");
-			sponsorEmailText = EmailConverter.convertSponsorEmailText(sponsorEmailText, sponsor);
 			
-			LinkedList<MimeBodyPart> attachments = new LinkedList<MimeBodyPart>();
-			
-		    try {
-		    	// FAQ pdf attachment
-			    MimeBodyPart faqBodyPart = new MimeBodyPart();
-			    DataSource faqSource = new FileDataSource((String)request.getSession().getAttribute("faqLoc"));
-				faqBodyPart.setDataHandler(new DataHandler(faqSource));
-			    faqBodyPart.setFileName("AAF_FAQ.pdf");
-			    
-			    attachments.add(faqBodyPart);
-			    
-		    	// sponsor obligations pdf attachment
-			    MimeBodyPart sponObligationsBodyPart = new MimeBodyPart();
-			    DataSource sponObligationsSource = new FileDataSource((String)request.getSession().getAttribute("sponObligationLoc"));
-			    sponObligationsBodyPart.setDataHandler(new DataHandler(sponObligationsSource));
-			    sponObligationsBodyPart.setFileName("Sponsor_Obligations.pdf");
-			    
-			    attachments.add(sponObligationsBodyPart);
-			    
-			    // family wishlist attachments
-				for (Family family : adoptedFamilies){
-				    MimeBodyPart famBodyPart = new MimeBodyPart();
-				    DataSource famSource = new FileDataSource(family.getAttachmentName());
-				    famBodyPart.setDataHandler(new DataHandler(famSource));
-				    famBodyPart.setFileName(family.getLastName() + attachmentSuffix);
+			if (!adoptedFamilies.isEmpty()){
+				System.out.println("Sending email to Spon ID " + sponsor.getSponId() + " at " + sponsor.getEmailAddress());
+	
+				String sponsorEmailText = (String) request.getSession().getAttribute("sponsorEmailText");
+				sponsorEmailText = EmailConverter.convertSponsorEmailText(sponsorEmailText, sponsor);
+				
+				LinkedList<MimeBodyPart> attachments = new LinkedList<MimeBodyPart>();
+				
+			    try {
+			    	// FAQ pdf attachment
+				    MimeBodyPart faqBodyPart = new MimeBodyPart();
+				    DataSource faqSource = new FileDataSource((String)request.getSession().getAttribute("faqLoc"));
+					faqBodyPart.setDataHandler(new DataHandler(faqSource));
+				    faqBodyPart.setFileName("AAF_FAQ.pdf");
 				    
-				    attachments.add(famBodyPart);
+				    attachments.add(faqBodyPart);
+				    
+			    	// sponsor obligations pdf attachment
+				    MimeBodyPart sponObligationsBodyPart = new MimeBodyPart();
+				    DataSource sponObligationsSource = new FileDataSource((String)request.getSession().getAttribute("sponObligationLoc"));
+				    sponObligationsBodyPart.setDataHandler(new DataHandler(sponObligationsSource));
+				    sponObligationsBodyPart.setFileName("Sponsor_Obligations.pdf");
+				    
+				    attachments.add(sponObligationsBodyPart);
+				    
+				    // family wishlist attachments
+					for (Family family : adoptedFamilies){
+					    MimeBodyPart famBodyPart = new MimeBodyPart();
+					    DataSource famSource = new FileDataSource(family.getAttachmentName());
+					    famBodyPart.setDataHandler(new DataHandler(famSource));
+					    famBodyPart.setFileName(family.getLastName() + attachmentSuffix);
+					    
+					    attachments.add(famBodyPart);
+					}
+				    
+				} catch (MessagingException e1) {
+					e1.printStackTrace();
 				}
-			    
-			} catch (MessagingException e1) {
-				e1.printStackTrace();
-			}
-			sponsorWriter.writeToFile("\n\nTO:" + sponsor.getEmailAddress() + "\n" + sponsorEmailText + "\n========================================\n");
-			
-			// Sponsor emails
-			if (actuallySendEmails)
-			{
-				String sponSuccess = emailSender.sendEmail("Adopt A Family Information", sponsorEmailText, sponsor.getEmailAddress(), attachments);
-			
-				totalSuccess += "\n" + sponsor.getEmailAddress() + " : " + sponSuccess;
-				request.getSession().setAttribute("statusMsg", totalSuccess);
+				sponsorWriter.writeToFile("\n\nTO:" + sponsor.getEmailAddress() + "\n" + sponsorEmailText + "\n========================================\n");
 				
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-//			// un-comment this code block for testing
-//			else if (sleepTimeWithoutEmails > 0)
-//			{
-//				System.out.println("Waiting " + sleepTimeWithoutEmails/1000 + " seconds instead of sending email to sponsor " + sponsor.getSponId());
-//				try {
-//					Thread.sleep(sleepTimeWithoutEmails);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-//				System.out.println(Calendar.getInstance().getTime());
-//			}
-			
-			// let nominator of each adopted family know their family was adopted
-			FileWriter nominatorWriter = new FileWriter(storeDir + "/NominatorEmails.doc");
-			for (Family family : adoptedFamilies){
-				Person nominator = family.getNominator();
-				
-				String nominatorEmailText = (String) request.getSession().getAttribute("nominatorEmailText");
-				nominatorEmailText = EmailConverter.convertNominatorEmailText(nominatorEmailText, family);
-				
-				nominatorWriter.writeToFile("\n\nTO:" + nominator.getEmailAddress() + "\n" + nominatorEmailText + "\n========================================\n");
-				
+				// Sponsor emails
 				if (actuallySendEmails)
 				{
-					String nomSuccess = emailSender.sendEmail("Adopt A Family Information", nominatorEmailText, nominator.getEmailAddress());
-					
-					totalSuccess += "\n" + nominator.getEmailAddress() + " : " + nomSuccess;
+					String sponSuccess = emailSender.sendEmail("Adopt A Family Information", sponsorEmailText, sponsor.getEmailAddress(), attachments);
+				
+					totalSuccess += "\n" + sponsor.getEmailAddress() + " : " + sponSuccess;
 					request.getSession().setAttribute("statusMsg", totalSuccess);
+					
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 				}
-//				// un-comment this code block for testing
-//				else if (sleepTimeWithoutEmails > 0)
-//				{
-//					System.out.println("Waiting " + sleepTimeWithoutEmails/1000 + " seconds instead of sending email to nominator of family " + family.getId());
-//					try {
-//						Thread.sleep(sleepTimeWithoutEmails);
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//					System.out.println(Calendar.getInstance().getTime());
-//				}
+	//			// un-comment this code block for testing
+	//			else if (sleepTimeWithoutEmails > 0)
+	//			{
+	//				System.out.println("Waiting " + sleepTimeWithoutEmails/1000 + " seconds instead of sending email to sponsor " + sponsor.getSponId());
+	//				try {
+	//					Thread.sleep(sleepTimeWithoutEmails);
+	//				} catch (InterruptedException e) {
+	//					e.printStackTrace();
+	//				}
+	//				System.out.println(Calendar.getInstance().getTime());
+	//			}
 				
+				// let nominator of each adopted family know their family was adopted
+				FileWriter nominatorWriter = new FileWriter(storeDir + "/NominatorEmails.doc");
+				for (Family family : adoptedFamilies){
+					Person nominator = family.getNominator();
+					
+					String nominatorEmailText = (String) request.getSession().getAttribute("nominatorEmailText");
+					nominatorEmailText = EmailConverter.convertNominatorEmailText(nominatorEmailText, family);
+					
+					nominatorWriter.writeToFile("\n\nTO:" + nominator.getEmailAddress() + "\n" + nominatorEmailText + "\n========================================\n");
+					
+					if (actuallySendEmails)
+					{
+						String nomSuccess = emailSender.sendEmail("Adopt A Family Information", nominatorEmailText, nominator.getEmailAddress());
+						
+						totalSuccess += "\n" + nominator.getEmailAddress() + " : " + nomSuccess;
+						request.getSession().setAttribute("statusMsg", totalSuccess);
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+	//				// un-comment this code block for testing
+	//				else if (sleepTimeWithoutEmails > 0)
+	//				{
+	//					System.out.println("Waiting " + sleepTimeWithoutEmails/1000 + " seconds instead of sending email to nominator of family " + family.getId());
+	//					try {
+	//						Thread.sleep(sleepTimeWithoutEmails);
+	//					} catch (InterruptedException e) {
+	//						e.printStackTrace();
+	//					}
+	//					System.out.println(Calendar.getInstance().getTime());
+	//				}
+					
+				}
+				nominatorWriter.close();
+
+				progressMessage = ">>> Emails sent: [" + Integer.toString(sponsorCounter) + " of " + Integer.toString(totalNumSponsors) + " Sponsors]";
+				progressMessage += " and [" + Integer.toString(waitlistCounter) + " of " + Integer.toString(totalWaitlistedFamilies) + " wait listed families] <<<";
+				System.out.println(progressMessage);
+			}else{
+				System.out.println(">>>>>> No email needed for [" + Integer.toString(sponsorCounter) + " of " + Integer.toString(totalNumSponsors) + " Sponsors]");
 			}
-			nominatorWriter.close();
-			++sponsorCounter;
-			progressMessage = ">>> Emails sent: [" + Integer.toString(sponsorCounter) + " of " + Integer.toString(totalNumSponsors) + " Sponsors]";
-			progressMessage += " and [" + Integer.toString(waitlistCounter) + " of " + Integer.toString(totalWaitlistedFamilies) + " wait listed families] <<<";
-			System.out.println(progressMessage);
+
 		}
 		
 		sponsorWriter.close();
