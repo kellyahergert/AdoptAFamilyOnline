@@ -32,7 +32,7 @@
       <input type=text list=mailServerList name="smtpServerIP" maxlength="100" value="${smtpServerIP}" required>
       <datalist id=mailServerList>
         <option label="smtp.comcast.net" value="smtp.comcast.net">
-        <option label="smtp.office365.com" value="smtp.office365.com">
+        <!-- <option label="smtp.office365.com" value="smtp.office365.com"> -->
         <option label="Internal Relay" value="10.10.16.236">
       </datalist>
       </label>

@@ -177,7 +177,7 @@ public class BasicEmailSender {
 			}
 			catch (MessagingException mex)
 			{			
-				System.out.println(mex.getMessage());
+				System.out.println("   === " +mex.getMessage() + " ===");
 			}
 			
 			// exponential back-off if email wasn't sent successfully

@@ -46,7 +46,8 @@ public class MatchingServlet extends HttpServlet {
 	    
 	    // create a copy of the families so we can poll()
 	    PriorityQueue<Family> familiesToAdopt = new PriorityQueue<Family>();
-	    
+	    PriorityQueue<SponsorEntry> sponsorEntriesNotMatched = new PriorityQueue<SponsorEntry>();
+	    		
 	    for (Family fam : families)
 	    {
 	    	familiesToAdopt.add(fam);
@@ -108,7 +109,7 @@ public class MatchingServlet extends HttpServlet {
 					{
 						System.out.println("  Skipped " + tempEntry.getFamType() + " sponsor, ID = " + 
 					                       tempEntry.getSponsor().getSponId());
-						sponsorEntries.poll(); // remove the sponsor that was too big
+						sponsorEntriesNotMatched.add(sponsorEntries.poll()); // remove the sponsor that was too big
 						tempEntry = sponsorEntries.peek();
 					}
 				}
@@ -120,7 +121,7 @@ public class MatchingServlet extends HttpServlet {
 					{
 						System.out.println("  Skipped " + tempEntry.getFamType() + " sponsor, ID = " + 
 			                       tempEntry.getSponsor().getSponId());
-						sponsorEntries.poll(); // remove the sponsor that was too big
+						sponsorEntriesNotMatched.add(sponsorEntries.poll()); // remove the sponsor that was too big
 						tempEntry = sponsorEntries.peek();
 					}
 					
@@ -153,9 +154,11 @@ public class MatchingServlet extends HttpServlet {
 			
 			System.out.println(familiesNotAdopted.size() + " families not adopted");
 			
+			sponsorEntriesNotMatched.addAll(sponsorEntries);
+			
 			// save leftover families and sponsor entries for sending rejection emails
 			request.getSession().setAttribute("unmatchedFamilies", familiesNotAdopted);
-			request.getSession().setAttribute("unmatchedSponsors", sponsorEntries);
+			request.getSession().setAttribute("unmatchedSponsors", sponsorEntriesNotMatched);
 		
 			if (!familiesNotAdopted.isEmpty())
 			{
@@ -169,12 +172,12 @@ public class MatchingServlet extends HttpServlet {
 				}
 				unmatchedWriter.close();
 			}
-			if (!sponsorEntries.isEmpty())
+			if (!sponsorEntriesNotMatched.isEmpty())
 			{				
 				FileWriter unmatchedWriter = new FileWriter(storeDir + "/unmatchedSponsors.csv");
 				unmatchedWriter.writeToFile(SponsorEntry.getHeader());
 				
-				for (SponsorEntry thisSpon : sponsorEntries)
+				for (SponsorEntry thisSpon : sponsorEntriesNotMatched)
 				{
 					System.out.println(thisSpon.getSponsor().getSponId() + " - " +  thisSpon.getSponsor().getLastName() + " family had no family to adopt :(");
 					unmatchedWriter.writeToFile("\n" + thisSpon.toString());

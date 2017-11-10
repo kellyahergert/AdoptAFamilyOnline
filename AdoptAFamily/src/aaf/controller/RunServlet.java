@@ -1,7 +1,10 @@
 package aaf.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -47,7 +50,8 @@ public class RunServlet extends HttpServlet {
 	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("RUNNING!!!!!!!!!");
-		System.out.println(Calendar.getInstance().getTime());
+		Date startTime = Calendar.getInstance().getTime();
+		System.out.println(startTime);
 		String totalSuccess = "";
 		
 		request.getRequestDispatcher("aaf4_run.jsp").forward(request, response);
@@ -285,7 +289,20 @@ public class RunServlet extends HttpServlet {
 			unmatchedWriter.close();
 	    }
 		
-		System.out.println("Done!");
+		Date endTime = Calendar.getInstance().getTime();
+		System.out.println(endTime);
+		
+		long diff = endTime.getTime() - startTime.getTime();
+
+		long diffHours = diff / (60 * 60 * 1000) % 24;
+
+		long diffMin = diff / (60 * 1000) % 60;
+
+		long diffSec = diff / 1000 % 60;
+
+		System.out.println(" -- Run Time: " + diffHours + " hr " + diffMin + " min " + diffSec + " sec");
+		
+		System.out.println("DONE!!!!!!");
 	}
 	
 
